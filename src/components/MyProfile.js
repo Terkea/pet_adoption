@@ -7,7 +7,7 @@ import { useHistory, Link, withRouter } from "react-router-dom";
 
 // import ChangePassword from "./CustomModal";
 import { runNotifications } from "../helpers/Notification";
-import UploadProfilePicture from "./UploadProfilePicture";
+// import UploadProfilePicture from "./UploadProfilePicture";
 import { useSelector, connect } from "react-redux";
 import { useFirebase, isEmpty } from "react-redux-firebase";
 
@@ -120,7 +120,7 @@ const MyProfile = (props) => {
           />
         </Row>
         <Row style={{ marginTop: "20px" }} align="center">
-          <UploadProfilePicture />
+          {/* <UploadProfilePicture /> */}
         </Row>
         <Title
           style={{ marginBottom: "30px", marginTop: "30px", maxHeight: "20px" }}

@@ -33,6 +33,8 @@ const UploadProfilePicture = (props) => {
           .then(() => runNotifications("Profile image updated", "SUCCESS"));
       });
       onError(e);
+    } catch (e) {
+      
     }
   };
 
