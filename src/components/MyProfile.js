@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Input, Form, Row, Col, Typography, Avatar, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -7,9 +7,10 @@ import { useHistory, Link, withRouter } from "react-router-dom";
 
 // import ChangePassword from "./CustomModal";
 import { runNotifications } from "../helpers/Notification";
-// import UploadProfilePicture from "./UploadProfilePicture";
+import UploadProfilePicture from "./UploadProfilePicture";
 import { useSelector, connect } from "react-redux";
 import { useFirebase, isEmpty } from "react-redux-firebase";
+import { storage } from "../createStore";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -18,6 +19,8 @@ const MyProfile = (props) => {
   const firebase = useFirebase();
   const profile = useSelector((state) => state.firebase.profile);
   const auth = useSelector((state) => state.firebase.auth);
+  const storageRef = storage.ref();
+  const [avatar, setAvatar] = useState();
   // ANTD FORM INPUT TRICKERY
   // https://stackoverflow.com/a/61244400/8193864
   // https://stackoverflow.com/a/62855456/8193864
@@ -39,28 +42,30 @@ const MyProfile = (props) => {
   const history = useHistory();
   useEffect(() => {
     // check if logged in
-    // if (isEmpty(auth)) {
-    //   history.push("/");
-    // }
-    // Set up the default values for the inputs
-    form.setFieldsValue({
-      newEmail: profile.email,
-      displayName: profile.username,
-      bio: profile.bio,
-    });
+    if (isEmpty(auth)) {
+      history.push("/");
+    } else {
+      // Set up the default values for the inputs
+      form.setFieldsValue({
+        newEmail: profile.email,
+        displayName: profile.username,
+        bio: profile.bio,
+      });
 
-    if (props.authError) {
-      runNotifications(props.authError.message, "ERROR");
+      // get the url for the avatar
+      storageRef
+        .child(`avatar/${profile.photoURL}`)
+        .getDownloadURL()
+        .then((res) => {
+          setAvatar(res);
+        })
+        .catch((e) => console.log(e));
+
+      if (props.authError) {
+        runNotifications(props.authError.message, "ERROR");
+      }
     }
-  }, [
-    form,
-    history,
-    auth,
-    props.authError,
-    profile.bio,
-    profile.email,
-    profile.username,
-  ]);
+  }, [form, history, auth, props, profile, storageRef]);
 
   const onFinish = (values) => {
     if (values.newEmail !== auth.email) {
@@ -91,7 +96,10 @@ const MyProfile = (props) => {
         firebase
           .updateProfile({
             username: values.displayName,
-            bio: values.bio,
+            bio: values.bio || "",
+          })
+          .then(() => {
+            runNotifications("Successfully updated profile", "SUCCESS");
           })
           .catch((e) => {
             runNotifications(e.message, "ERROR");
@@ -114,13 +122,13 @@ const MyProfile = (props) => {
         <Row align="center">
           <Avatar
             align="middle"
-            src={profile.photoURL}
+            src={avatar}
             size={256}
             icon={<UserOutlined />}
           />
         </Row>
         <Row style={{ marginTop: "20px" }} align="center">
-          {/* <UploadProfilePicture /> */}
+          <UploadProfilePicture />
         </Row>
         <Title
           style={{ marginBottom: "30px", marginTop: "30px", maxHeight: "20px" }}

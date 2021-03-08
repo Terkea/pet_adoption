@@ -22,20 +22,16 @@ const UploadProfilePicture = (props) => {
     const storageRef = storage.ref();
     const imageName = uuid(); //a unique name for the image
     const imgFile = storageRef.child(`avatar/${imageName}.jpg`);
-    try {
-      const image = imgFile.put(file, metadata);
-      image.then((snapshot) => {
-        onSuccess(null, image);
-        firebase
-          .updateProfile({
-            photoURL: `${imageName}.jpg`,
-          })
-          .then(() => runNotifications("Profile image updated", "SUCCESS"));
-      });
-      onError(e);
-    } catch (e) {
-      
-    }
+
+    const image = imgFile.put(file, metadata);
+    image.then((snapshot) => {
+      onSuccess(null, image);
+      firebase
+        .updateProfile({
+          photoURL: `${imageName}.jpg`,
+        })
+        .then(() => runNotifications("Profile image updated", "SUCCESS"));
+    });
   };
 
   const options = {
