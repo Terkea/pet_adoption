@@ -54,10 +54,10 @@ const CustomLayout = (props) => {
           ) : null}
         </Menu>
       </Header>
-      <Content style={{ padding: "0 10px", height: "86vh" }}>
+      <Content style={{ padding: "0 10px", height: "100vh" }}>
         <div style={{ padding: 24 }}>{props.children}</div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>IDK YET</Footer>
+      <Footer style={{ textAlign: "center" }}>Pets for you</Footer>
     </Layout>
   );
 };

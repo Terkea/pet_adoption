@@ -182,21 +182,6 @@ const MyProfile = (props) => {
               </Form.Item>
 
               <Form.Item
-                label="Current password:"
-                name="current_password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your current password!",
-                  },
-                ]}
-              >
-                <Input.Password
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                />
-              </Form.Item>
-
-              <Form.Item
                 label="Telephone number"
                 name="phoneNo"
                 rules={[
@@ -246,6 +231,21 @@ const MyProfile = (props) => {
                 ]}
               >
                 <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Current password:"
+                name="current_password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your current password!",
+                  },
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined className="site-form-item-icon" />}
+                />
               </Form.Item>
 
               <Row align="middle">

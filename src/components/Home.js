@@ -1,7 +1,10 @@
 import React from "react";
-import { Typography } from "antd";
+import { ResponsiveImageSize } from "react-responsive-image";
+import { Typography, Row, Col, Divider, Input, Button } from "antd";
 
-const { Title } = Typography;
+import aboutMe from "../img/Untitled-2.png";
+
+const { Title, Text } = Typography;
 
 const Home = (props) => {
   return (
@@ -10,29 +13,30 @@ const Home = (props) => {
         <b>Hi {props.payload.user.email}</b>
       ) : (
         <>
-          <Title>Adopt a pet</Title>
-          <Title>Gain a friend</Title>
-          <Title level={4}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum. Why do we use it? It is
-            a long established fact that a reader will be distracted by the
-            readable content of a page when looking at its layout. The point of
-            using Lorem Ipsum is that it has a more-or-less normal distribution
-            of letters, as opposed to using 'Content here, content here', making
-            it look like readable English. Many desktop publishing packages and
-            web page editors now use Lorem Ipsum as their default model text,
-            and a search for 'lorem ipsum' will uncover many web sites still in
-            their infancy. Various versions have evolved over the years,
-            sometimes by accident, sometimes on purpose (injected humour and the
-            like).
-          </Title>
+          <Row justify="space-around" align="middle">
+            <Title>Pets for you</Title>
+          </Row>
+          <Row justify="space-around" align="middle">
+            <br />
+            <Col xs={24} lg={6}>
+              <img alt="adopt me" style={{ width: "100%" }} src={aboutMe} />
+            </Col>
+            <Col xs={20} lg={14}>
+              <Title level={4}>
+                Mainly self-thought but currently studying at the University of
+                Bedfordshire. Passionate about open-sourced technologies.
+                Throughout the years I have explored multiple technologies by
+                working on personal and collaborative projects, looking for
+                something that I could settle on and further develop.
+              </Title>
+            </Col>
+          </Row>
+          <Divider />
+          <Row>
+            Search by city
+            <Input></Input>
+            <Button>Search</Button>
+          </Row>
         </>
       )}
     </div>
