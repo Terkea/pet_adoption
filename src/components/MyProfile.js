@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Input, Form, Row, Col, Typography, Avatar, Button } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, PhoneOutlined } from "@ant-design/icons";
 
 import { useHistory, Link, withRouter } from "react-router-dom";
 
@@ -49,7 +49,10 @@ const MyProfile = (props) => {
       form.setFieldsValue({
         newEmail: profile.email,
         displayName: profile.username,
-        bio: profile.bio,
+        phoneNo: profile.phoneNo,
+        address: profile.address,
+        city: profile.city,
+        postcode: profile.postcode,
       });
 
       // get the url for the avatar
@@ -96,7 +99,10 @@ const MyProfile = (props) => {
         firebase
           .updateProfile({
             username: values.displayName,
-            bio: values.bio || "",
+            phoneNo: values.phoneNo || "",
+            city: values.city || "",
+            postcode: values.postcode || "",
+            address: values.address || "",
           })
           .then(() => {
             runNotifications("Successfully updated profile", "SUCCESS");
@@ -136,15 +142,10 @@ const MyProfile = (props) => {
           level={4}
         ></Title>
         <Row align="center">
-          <Col md={4} xs={0}>
-            <Title level={4}>Display name</Title>
-            <Title level={4}>E-mail</Title>
-            <Title level={4}>Current password</Title>
-            <Title level={4}>Bio</Title>
-          </Col>
-
-          <Col style={{ marginLeft: "10px" }} md={8}>
+          <Col style={{ marginLeft: "10px" }} md={20}>
             <Form
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
               form={form}
               name="normal_login"
               className="login-form"
@@ -155,6 +156,7 @@ const MyProfile = (props) => {
             >
               <Form.Item
                 name="displayName"
+                label="Display name:"
                 rules={[
                   {
                     required: true,
@@ -169,6 +171,7 @@ const MyProfile = (props) => {
 
               <Form.Item
                 name="newEmail"
+                label="New email:"
                 rules={[
                   { required: false, message: "Please input your E-mail!" },
                 ]}
@@ -179,6 +182,7 @@ const MyProfile = (props) => {
               </Form.Item>
 
               <Form.Item
+                label="Current password:"
                 name="current_password"
                 rules={[
                   {
@@ -193,24 +197,69 @@ const MyProfile = (props) => {
               </Form.Item>
 
               <Form.Item
-                name="bio"
+                label="Telephone number"
+                name="phoneNo"
                 rules={[
                   {
                     required: false,
-                    message: "Please input your bio!",
+                    message: "Please input your phone!",
                   },
                 ]}
               >
-                <TextArea autoSize={{ minRows: 2, maxRows: 2 }} />
+                <Input prefix={<PhoneOutlined />} />
+              </Form.Item>
+
+              <Form.Item
+                label="City"
+                name="city"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your city!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Full address"
+                name="address"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your address!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Postcode"
+                name="postcode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your postcode!",
+                  },
+                ]}
+              >
+                <Input />
               </Form.Item>
 
               <Row align="middle">
-                <Col span={12}>
-                  <Button type="primary" htmlType="submit">
+                <Col offset={8} span={6}>
+                  <Button
+                    block={true}
+                    size={"large"}
+                    type="primary"
+                    htmlType="submit"
+                  >
                     Update profile
                   </Button>
                 </Col>
-                <Col span={12} align="end">
+                <Col offset={6} span={4} align="end">
                   <Link to="#" onClick={resetPassword} type="primary">
                     Change password
                   </Link>

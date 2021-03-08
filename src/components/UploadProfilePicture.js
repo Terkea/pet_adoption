@@ -22,7 +22,6 @@ const UploadProfilePicture = (props) => {
     const storageRef = storage.ref();
     const imageName = uuid(); //a unique name for the image
     const imgFile = storageRef.child(`avatar/${imageName}.jpg`);
-
     const image = imgFile.put(file, metadata);
     image.then((snapshot) => {
       onSuccess(null, image);
@@ -46,7 +45,7 @@ const UploadProfilePicture = (props) => {
     <ImgCrop rotate>
       <Upload customRequest={customUpload} {...options}>
         <Title level={4}>
-          <Link to="#">Update profile picture</Link>
+          <Link to="#">Upload profile picture</Link>
         </Title>
       </Upload>
     </ImgCrop>
