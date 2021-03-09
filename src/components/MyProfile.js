@@ -42,32 +42,32 @@ const MyProfile = (props) => {
   const history = useHistory();
   useEffect(() => {
     // check if logged in
-    if (isEmpty(auth)) {
-      history.push("/");
-    } else {
-      // Set up the default values for the inputs
-      form.setFieldsValue({
-        newEmail: profile.email,
-        displayName: profile.username,
-        phoneNo: profile.phoneNo,
-        address: profile.address,
-        city: profile.city,
-        postcode: profile.postcode,
-      });
+    // if (isEmpty(auth)) {
+    //   history.push("/");
+    // } else {
+    // Set up the default values for the inputs
+    form.setFieldsValue({
+      newEmail: profile.email,
+      displayName: profile.username,
+      phoneNo: profile.phoneNo,
+      address: profile.address,
+      city: profile.city,
+      postcode: profile.postcode,
+    });
 
-      // get the url for the avatar
-      storageRef
-        .child(`avatar/${profile.photoURL}`)
-        .getDownloadURL()
-        .then((res) => {
-          setAvatar(res);
-        })
-        .catch((e) => console.log(e));
+    // get the url for the avatar
+    storageRef
+      .child(`avatar/${profile.photoURL}`)
+      .getDownloadURL()
+      .then((res) => {
+        setAvatar(res);
+      })
+      .catch((e) => console.log(e));
 
-      if (props.authError) {
-        runNotifications(props.authError.message, "ERROR");
-      }
+    if (props.authError) {
+      runNotifications(props.authError.message, "ERROR");
     }
+    // }
   }, [form, history, auth, props, profile, storageRef]);
 
   const onFinish = (values) => {
@@ -249,17 +249,17 @@ const MyProfile = (props) => {
               </Form.Item>
 
               <Row align="middle">
-                <Col offset={8} span={6}>
+                <Col offset={8} span={8}>
                   <Button
                     block={true}
-                    size={"large"}
+                    size={"medium"}
                     type="primary"
                     htmlType="submit"
                   >
                     Update profile
                   </Button>
                 </Col>
-                <Col offset={6} span={4} align="end">
+                <Col offset={2} span={6} align="end">
                   <Link to="#" onClick={resetPassword} type="primary">
                     Change password
                   </Link>

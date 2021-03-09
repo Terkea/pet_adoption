@@ -13,7 +13,7 @@ const CustomLayout = (props) => {
   return (
     <Layout className="layout">
       <Header>
-        {/* <div className="logo" /> */}
+        <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["/"]}>
           <Menu.Item key="/">
             <Link to="/">Home</Link>
