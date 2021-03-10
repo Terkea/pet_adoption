@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Input, Form, Row, Col, Typography, Avatar, Button } from "antd";
+import { Input, Form, Row, Col, Typography, Avatar, Button, Card } from "antd";
 import { UserOutlined, LockOutlined, PhoneOutlined } from "@ant-design/icons";
 
 import { useHistory, Link, withRouter } from "react-router-dom";
@@ -124,7 +124,7 @@ const MyProfile = (props) => {
 
   return (
     <Row justify="center" style={styles.mainRow}>
-      <Col md={14} xs={24}>
+      <Card style={{ width: 700 }}>
         <Row align="center">
           <Avatar
             align="middle"
@@ -137,7 +137,11 @@ const MyProfile = (props) => {
           <UploadProfilePicture />
         </Row>
         <Title
-          style={{ marginBottom: "30px", marginTop: "30px", maxHeight: "20px" }}
+          style={{
+            marginBottom: "30px",
+            marginTop: "30px",
+            maxHeight: "20px",
+          }}
           align="center"
           level={4}
         ></Title>
@@ -249,6 +253,7 @@ const MyProfile = (props) => {
               </Form.Item>
 
               <Row align="middle">
+                {" "}
                 <Col offset={8} span={8}>
                   <Button
                     block={true}
@@ -268,7 +273,7 @@ const MyProfile = (props) => {
             </Form>
           </Col>
         </Row>
-      </Col>
+      </Card>
     </Row>
   );
 };
