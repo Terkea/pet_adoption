@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import CustomLayout from "./containers/Layout";
 import MyProfile from "./components/MyProfile";
+import Search from "./components/Search";
 
 import "antd/dist/antd.less"; // or 'antd/dist/antd.less'
 import "./App.css";
@@ -27,6 +28,7 @@ const App = (props) => {
             <CustomLayout {...props}>
               <Route exact path="/" component={Home} />
               <Route exact path="/my_profile" component={MyProfile} />
+              <Route exact path="/search" component={Search} />
             </CustomLayout>
           </Switch>
         </Router>

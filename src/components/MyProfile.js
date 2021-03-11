@@ -3,17 +3,16 @@ import React, { useEffect, useState } from "react";
 import { Input, Form, Row, Col, Typography, Avatar, Button, Card } from "antd";
 import { UserOutlined, LockOutlined, PhoneOutlined } from "@ant-design/icons";
 
-import { useHistory, Link, withRouter } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 // import ChangePassword from "./CustomModal";
 import { runNotifications } from "../helpers/Notification";
 import UploadProfilePicture from "./UploadProfilePicture";
 import { useSelector, connect } from "react-redux";
-import { useFirebase, isEmpty } from "react-redux-firebase";
+import { useFirebase } from "react-redux-firebase";
 import { storage } from "../createStore";
 
 const { Title } = Typography;
-const { TextArea } = Input;
 
 const MyProfile = (props) => {
   const firebase = useFirebase();
@@ -136,15 +135,7 @@ const MyProfile = (props) => {
         <Row style={{ marginTop: "20px" }} align="center">
           <UploadProfilePicture />
         </Row>
-        <Title
-          style={{
-            marginBottom: "30px",
-            marginTop: "30px",
-            maxHeight: "20px",
-          }}
-          align="center"
-          level={4}
-        ></Title>
+
         <Row align="center">
           <Col style={{ marginLeft: "10px" }} md={20}>
             <Form
@@ -253,7 +244,6 @@ const MyProfile = (props) => {
               </Form.Item>
 
               <Row align="middle">
-                {" "}
                 <Col offset={8} span={8}>
                   <Button
                     block={true}

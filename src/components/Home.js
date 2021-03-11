@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ResponsiveImageSize } from "react-responsive-image";
 import { Typography, Row, Col, Input, AutoComplete, Layout } from "antd";
+import { useHistory } from "react-router-dom";
 
 // SVGS
 import picture from "../img/Untitled-2.png";
@@ -15,13 +16,16 @@ import fundUs from "../img/4176419.svg";
 
 const { Title, Text } = Typography;
 const { Footer } = Layout;
+
 const Home = (props) => {
   const [options, setOptions] = useState([]);
+  let history = useHistory();
 
   const handleSearch = (value) => {
     let res = [];
 
     if (value.length > 2) {
+      // eslint-disable-next-line array-callback-return
       Object.keys(cities).map((city) => {
         if (city.toLowerCase().includes(value)) {
           return res.push({
@@ -50,21 +54,7 @@ const Home = (props) => {
   };
 
   const onSelect = (value) => {
-    console.log("onSelect", value);
-  };
-
-  const styles = {
-    svgContainer: {
-      backgroundImage: `url(${background})`,
-      margin: 0,
-      padding: 0,
-      backgroundPosition: "left center !important",
-      backgroundSize: "cover",
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      overflow: "auto",
-    },
+    history.push(`/search?city=${value}`);
   };
 
   return (
@@ -77,11 +67,7 @@ const Home = (props) => {
             <Row
               justify="space-around"
               align="middle"
-              style={{
-                height: "100vh",
-                textAlign: "center",
-                overflow: "hidden",
-              }}
+              style={styles.rowSearchByCity}
             >
               <Col xs={20} lg={6}>
                 <img alt="adopt me" style={{ width: "80%" }} src={picture} />
@@ -110,44 +96,38 @@ const Home = (props) => {
           <Row
             justify="space-around"
             align="middle"
-            style={{
-              marginTop: "50px",
-              marginBottom: "150px",
-            }}
+            style={styles.rowSecondSection}
           >
             <Col xs={24} lg={12}>
               <ResponsiveImageSize default minWidth={0} path={whyAdopting} />
               <Title level={4}>Why adopting?</Title>
-              <Text style={{ fontSize: "16px" }}>
-                Mainly self-thought but currently studying at the University of
-                Bedfordshire. Passionate about open-sourced technologies.
-                Throughout the years I have explored multiple technologies by
-                working on personal and collaborative projects, looking for
-                something that I could settle on and further develop.
+              <Text style={styles.text}>
+                Adopting not only saves you money. Adopting provides an animal
+                with a second chance to experience love and in many cases, it
+                can be a life saviour. Adopting also improves other animals
+                lives as it reduces breeding factories from people exploiting
+                animals for money.
               </Text>
             </Col>
 
             <Col xs={24} lg={8}>
               <ResponsiveImageSize minWidth={100} path={didYouKnow} />
               <Title level={4}>Did you know?</Title>
-              <Text style={{ fontSize: "16px" }}>
-                Mainly self-thought but currently studying at the University of
-                Bedfordshire. Passionate about open-sourced technologies.
+              <Text style={styles.text}>
+                Almost 6.5 million animals enter shelters worldwide and 1.5 of
+                which are euthanized. adopting allows these animals to
+                experience life again.
               </Text>
             </Col>
           </Row>
 
           {/* STATS */}
-
-          <Row
-            justify="space-around"
-            align="middle"
-            style={{ marginTop: "50px", background: "#f0f2f5" }}
-          >
-            <Col style={{ textAlign: "center" }} xs={24} lg={6}>
+          <Row justify="space-around" align="middle" style={styles.rowStats}>
+            <Col style={styles.rowStats} xs={24} lg={6}>
               <ResponsiveImageSize default minWidth={0} path={adoptedPets} />
               <Title level={2}>
-                Since we launched we found shelters for more than 231,312 pets
+                Since we launched, we have helped rehome over 13,531 pets into
+                happy homes.
               </Title>
             </Col>
             <Col style={{ textAlign: "center" }} xs={24} lg={6}>
@@ -167,11 +147,7 @@ const Home = (props) => {
           </Row>
 
           {/* FUND US */}
-          <Row
-            justify="space-around"
-            align="middle"
-            style={{ marginTop: "50px", marginBottom: "50px" }}
-          >
+          <Row justify="space-around" align="middle" style={styles.rowFundUs}>
             <Col style={{ textAlign: "center" }} xs={24} lg={6}>
               <Title>Support us</Title>
               <ResponsiveImageSize default minWidth={0} path={fundUs} />
@@ -192,6 +168,32 @@ const Home = (props) => {
       )}
     </div>
   );
+};
+
+const styles = {
+  svgContainer: {
+    backgroundImage: `url(${background})`,
+    margin: 0,
+    padding: 0,
+    backgroundPosition: "left center !important",
+    backgroundSize: "cover",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    overflow: "auto",
+  },
+  rowSearchByCity: {
+    height: "100vh",
+    textAlign: "center",
+    overflow: "hidden",
+  },
+  rowSecondSection: {
+    marginTop: "50px",
+    marginBottom: "150px",
+  },
+  rowFundUs: { marginTop: "50px", marginBottom: "50px" },
+  rowStats: { marginTop: "50px", background: "#f0f2f5" },
+  text: { fontSize: "16px" },
 };
 
 export default Home;

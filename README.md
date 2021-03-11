@@ -5,7 +5,7 @@
 - forgotten password DONE
 - update profile BUG -- FIXED
 
-- landing page content TODO
-- apply for pet TODO
+- landing page text TODO
+
 - create new item TODO
 - management system for items TODO
