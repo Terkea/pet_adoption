@@ -13,7 +13,16 @@ const CustomLayout = (props) => {
 
   return (
     <Layout className="layout">
-      <Header>
+      <Header
+        style={{
+          width: "100%",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          zIndex: 1,
+          overflow: "hidden",
+        }}
+      >
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["/"]}>
           <Menu.Item key="/">
@@ -65,7 +74,7 @@ const CustomLayout = (props) => {
           ) : null}
         </Menu>
       </Header>
-      <Content style={{ height: "100vh" }}>
+      <Content style={{ minHeight: "100vh", overflow: "auto" }}>
         <div>{props.children}</div>
       </Content>
     </Layout>

@@ -188,11 +188,12 @@ const styles = {
     overflow: "hidden",
   },
   rowSecondSection: {
-    marginTop: "50px",
-    marginBottom: "150px",
+    paddingTop: "50px",
+    paddingBottom: "150px",
+    background: "white",
   },
-  rowFundUs: { marginTop: "50px", marginBottom: "50px" },
-  rowStats: { marginTop: "50px", background: "#f0f2f5" },
+  rowFundUs: { paddingTop: "50px", paddingBottom: "50px", background: "white" },
+  rowStats: { paddingTop: "50px" },
   text: { fontSize: "16px" },
 };
 
