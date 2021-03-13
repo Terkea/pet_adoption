@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import MyProfile from "./components/MyProfile";
 import Search from "./components/Search";
+import CreatePost from "./components/CreatePost";
 import AdoptionDashboard from "./components/AdoptionDashboard";
 
 import "antd/dist/antd.less"; // or 'antd/dist/antd.less'
@@ -25,7 +26,7 @@ const App = (props) => {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-
+            <Route exact path="/create_post" component={CreatePost} />
             <Route exact path="/search" component={Search} />
             <Route exact path="/dashboard" component={AdoptionDashboard} />
             <Route exact path="/my_profile" component={MyProfile} />
