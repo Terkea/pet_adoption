@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ResponsiveImageSize } from "react-responsive-image";
 import { Typography, Row, Col, Input, AutoComplete, Layout } from "antd";
 import { useHistory } from "react-router-dom";
+import Navigation from "./Navigation";
 
 // SVGS
 import picture from "../img/Untitled-2.png";
@@ -58,7 +59,8 @@ const Home = (props) => {
   };
 
   return (
-    <div>
+    <Layout>
+      <Navigation />
       {props.payload ? (
         <b>Hi {props.payload.user.email}</b>
       ) : (
@@ -166,7 +168,7 @@ const Home = (props) => {
           </Footer>
         </>
       )}
-    </div>
+    </Layout>
   );
 };
 

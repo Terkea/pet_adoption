@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { Input, Form, Row, Col, Typography, Avatar, Button, Card } from "antd";
+import {
+  Input,
+  Form,
+  Row,
+  Col,
+  Typography,
+  Avatar,
+  Button,
+  Card,
+  Layout,
+} from "antd";
 import { UserOutlined, LockOutlined, PhoneOutlined } from "@ant-design/icons";
 
 import { useHistory, Link } from "react-router-dom";
@@ -8,10 +18,10 @@ import { useHistory, Link } from "react-router-dom";
 // import ChangePassword from "./CustomModal";
 import { runNotifications } from "../helpers/Notification";
 import UploadProfilePicture from "./UploadProfilePicture";
+import Navigation from "./Navigation";
 import { useSelector, connect } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
 import { storage } from "../createStore";
-
 const { Title } = Typography;
 
 const MyProfile = (props) => {
@@ -25,7 +35,7 @@ const MyProfile = (props) => {
   // https://stackoverflow.com/a/62855456/8193864
 
   const [form] = Form.useForm();
-
+  const { Content } = Layout;
   const styles = {
     logo: {
       fontSize: "100px",
@@ -33,8 +43,12 @@ const MyProfile = (props) => {
       marginBottom: "30px",
     },
     mainRow: {
-      height: "50vh",
       paddingTop: "30px",
+    },
+    content: {
+      margin: "150px 16px 0",
+      overflow: "initial",
+      minHeight: "100vh",
     },
   };
 
@@ -122,149 +136,155 @@ const MyProfile = (props) => {
   };
 
   return (
-    <Row justify="center" style={styles.mainRow}>
-      <Card style={{ width: 700 }}>
-        <Row align="center">
-          <Avatar
-            align="middle"
-            src={avatar}
-            size={256}
-            icon={<UserOutlined />}
-          />
-        </Row>
-        <Row style={{ marginTop: "20px" }} align="center">
-          <UploadProfilePicture />
-        </Row>
+    <Layout>
+      <Navigation />
+      <Content style={styles.content}>
+        <Title style={{ textAlign: "center" }}>My profile</Title>
+        <Row justify="center" style={styles.mainRow}>
+          <Card style={{ width: 700 }}>
+            <Row align="center">
+              <Avatar
+                align="middle"
+                src={avatar}
+                size={256}
+                icon={<UserOutlined />}
+              />
+            </Row>
+            <Row style={{ marginTop: "20px" }} align="center">
+              <UploadProfilePicture />
+            </Row>
 
-        <Row align="center">
-          <Col style={{ marginLeft: "10px" }} md={20}>
-            <Form
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              form={form}
-              name="normal_login"
-              className="login-form"
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-            >
-              <Form.Item
-                name="displayName"
-                label="Display name:"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your display name!",
-                  },
-                ]}
-              >
-                <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="newEmail"
-                label="New email:"
-                rules={[
-                  { required: false, message: "Please input your E-mail!" },
-                ]}
-              >
-                <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Telephone number"
-                name="phoneNo"
-                rules={[
-                  {
-                    required: false,
-                    message: "Please input your phone!",
-                  },
-                ]}
-              >
-                <Input prefix={<PhoneOutlined />} />
-              </Form.Item>
-
-              <Form.Item
-                label="City"
-                name="city"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your city!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Full address"
-                name="address"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your address!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Postcode"
-                name="postcode"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your postcode!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Current password:"
-                name="current_password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your current password!",
-                  },
-                ]}
-              >
-                <Input.Password
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                />
-              </Form.Item>
-
-              <Row align="middle">
-                <Col offset={8} span={8}>
-                  <Button
-                    block={true}
-                    size={"medium"}
-                    type="primary"
-                    htmlType="submit"
+            <Row align="center">
+              <Col style={{ marginLeft: "10px" }} md={20}>
+                <Form
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 16 }}
+                  form={form}
+                  name="normal_login"
+                  className="login-form"
+                  initialValues={{
+                    remember: true,
+                  }}
+                  onFinish={onFinish}
+                >
+                  <Form.Item
+                    name="displayName"
+                    label="Display name:"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your display name!",
+                      },
+                    ]}
                   >
-                    Update profile
-                  </Button>
-                </Col>
-                <Col offset={2} span={6} align="end">
-                  <Link to="#" onClick={resetPassword} type="primary">
-                    Change password
-                  </Link>
-                </Col>
-              </Row>
-            </Form>
-          </Col>
+                    <Input
+                      prefix={<UserOutlined className="site-form-item-icon" />}
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="newEmail"
+                    label="New email:"
+                    rules={[
+                      { required: false, message: "Please input your E-mail!" },
+                    ]}
+                  >
+                    <Input
+                      prefix={<UserOutlined className="site-form-item-icon" />}
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Telephone number"
+                    name="phoneNo"
+                    rules={[
+                      {
+                        required: false,
+                        message: "Please input your phone!",
+                      },
+                    ]}
+                  >
+                    <Input prefix={<PhoneOutlined />} />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="City"
+                    name="city"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your city!",
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Full address"
+                    name="address"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your address!",
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Postcode"
+                    name="postcode"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your postcode!",
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Current password:"
+                    name="current_password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your current password!",
+                      },
+                    ]}
+                  >
+                    <Input.Password
+                      prefix={<LockOutlined className="site-form-item-icon" />}
+                    />
+                  </Form.Item>
+
+                  <Row align="middle">
+                    <Col offset={8} span={8}>
+                      <Button
+                        block={true}
+                        size={"medium"}
+                        type="primary"
+                        htmlType="submit"
+                      >
+                        Update profile
+                      </Button>
+                    </Col>
+                    <Col offset={2} span={6} align="end">
+                      <Link to="#" onClick={resetPassword} type="primary">
+                        Change password
+                      </Link>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+            </Row>
+          </Card>
         </Row>
-      </Card>
-    </Row>
+      </Content>
+    </Layout>
   );
 };
 

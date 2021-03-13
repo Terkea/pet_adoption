@@ -4,7 +4,6 @@ import React from "react";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import CustomLayout from "./containers/Layout";
 import MyProfile from "./components/MyProfile";
 import Search from "./components/Search";
 
@@ -25,11 +24,9 @@ const App = (props) => {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
 
-            <CustomLayout {...props}>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/my_profile" component={MyProfile} />
-              <Route exact path="/search" component={Search} />
-            </CustomLayout>
+            <Route exact path="/search" component={Search} />
+            <Route exact path="/" component={Home} />
+            <Route exact path="/my_profile" component={MyProfile} />
           </Switch>
         </Router>
       </ReactReduxFirebaseProvider>
