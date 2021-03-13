@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Row,
@@ -11,43 +11,81 @@ import {
   Card,
   Upload,
   message,
+  Select,
+  Tooltip,
 } from "antd";
 
-import { InboxOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
 
+import { InboxOutlined } from "@ant-design/icons";
+import { storage } from "../createStore";
+
 import { useFirestore } from "react-redux-firebase";
+import uuid from "react-uuid";
+import { runNotifications } from "../helpers/Notification";
 
 const { Title } = Typography;
 const { Content } = Layout;
 const { Dragger } = Upload;
+const { Option } = Select;
+const { Item } = Form;
+const { TextArea } = Input;
 
 const CreatePost = (props) => {
   const [form] = Form.useForm();
   const firestore = useFirestore();
+  const [fileList, updateFileList] = useState([]);
+  const [pictures, setPictures] = useState([]);
 
-  const fileupload = {
+  const customUpload = ({ onError, onSuccess, file }) => {
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+    const storageRef = storage.ref();
+    const imageName = uuid(); //a unique name for the image
+
+    const imgFile = storageRef.child(`pets/${imageName}.jpg`);
+    const image = imgFile.put(file, metadata);
+    image.then((snapshot) => {
+      onSuccess(null, image);
+      setPictures(...pictures, imageName);
+      console.log("imageName", imageName);
+      message.success(`File uploaded successfully.`);
+      console.log("pictures", pictures);
+    });
+  };
+
+  const options = {
+    fileList,
     name: "file",
     multiple: true,
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    showUploadList: true,
+    onChange: (info) => {
+      updateFileList(info.fileList.filter((file) => !!file.status));
     },
   };
 
   const onFinish = (values) => {
-    return firestore.collection("posts").add(values);
+    // get only the fields that have values
+    const validValues = Object.fromEntries(
+      Object.entries(values).filter(([_, v]) => v != null)
+    );
+    validValues.pictures = pictures;
+    console.log(pictures);
+    console.log(validValues);
+    try {
+      return firestore
+        .collection("posts")
+        .add(validValues)
+        .then(() => {
+          runNotifications("Post created successfully", "SUCCESS");
+        });
+    } catch (e) {
+      runNotifications("You need to upload at least one picture", "ERROR");
+    }
   };
   return (
-    <Layout style={{ width: "100%", height: "100vh" }}>
+    <Layout style={{ width: "100%", minHeight: "100vh" }}>
       <Navigation />
       <Layout>
         <Content style={styles.content}>
@@ -61,9 +99,9 @@ const CreatePost = (props) => {
             Create post
           </Title>
           <Row justify="center">
-            <Col md={16} xs={20}>
+            <Col md={8} xs={20}>
               <Card>
-                <Dragger {...fileupload} style={{ marginBottom: "30px" }}>
+                <Dragger customRequest={customUpload} {...options}>
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>
@@ -76,40 +114,125 @@ const CreatePost = (props) => {
                   </p>
                 </Dragger>
 
-                <Form form={form} onFinish={onFinish}>
-                  <Form.Item
-                    name="username"
+                <Form
+                  form={form}
+                  onFinish={onFinish}
+                  layout="horizontal"
+                  style={{ marginTop: "20px" }}
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 14 }}
+                >
+                  <Item
+                    name="title"
+                    label="Post title"
                     rules={[
-                      {
-                        required: true,
-                        message: "Please input your Username!",
-                      },
+                      { required: true, message: "Title field is required" },
                     ]}
                   >
-                    <Input placeholder="Username" />
-                  </Form.Item>
-                  <Form.Item
-                    name="password"
+                    <Input />
+                  </Item>
+                  <Item
+                    name="pet_type"
+                    label="Pet Type"
                     rules={[
-                      {
-                        required: true,
-                        message: "Please input your Password!",
-                      },
+                      { required: true, message: "Pet type field is required" },
                     ]}
                   >
-                    <Input type="password" placeholder="Password" />
-                  </Form.Item>
+                    <Select placeholder="Pet type">
+                      <Option value={true}>Yes</Option>
+                      <Option value={false}>No</Option>
+                    </Select>
+                  </Item>
+                  <Item
+                    name="breed"
+                    label="Breed"
+                    rules={[
+                      { required: true, message: "Breed field is required" },
+                    ]}
+                  >
+                    <Select placeholder="Select province">
+                      <Option value="Zhejiang">Zhejiang</Option>
+                      <Option value="Jiangsu">Jiangsu</Option>
+                    </Select>
+                  </Item>
 
-                  <Form.Item>
-                    <Button
-                      block
-                      type="primary"
-                      htmlType="submit"
-                      className="login-form-button"
-                    >
-                      Submit
-                    </Button>
-                  </Form.Item>
+                  <Item name="age" label="Age" rules={[{ required: false }]}>
+                    <Input />
+                  </Item>
+                  <Item
+                    name="microchiped"
+                    label={
+                      <Tooltip
+                        title="Microchipping a pet is the process of implanting a chip under the 
+                      pets skin and registering the keepers details on a national database so
+                      that the keeper can be traced."
+                      >
+                        Microchiped?
+                      </Tooltip>
+                    }
+                    rules={[{ required: false }]}
+                  >
+                    <Select placeholder="Is the pet microchiped?">
+                      <Option value={true}>Yes</Option>
+                      <Option value={false}>No</Option>
+                    </Select>
+                  </Item>
+                  <Item
+                    name="registered"
+                    label="Registered?"
+                    rules={[{ required: false }]}
+                  >
+                    <Select placeholder="Is the pet registered?">
+                      <Option value={true}>Yes</Option>
+                      <Option value={false}>No</Option>
+                    </Select>
+                  </Item>
+                  <Item
+                    name="neutred"
+                    label={
+                      <Tooltip title="Neutering is a small surgical operation performed by a vet to prevent the animal from being able to have babies.">
+                        Neutred?
+                      </Tooltip>
+                    }
+                    rules={[{ required: false }]}
+                  >
+                    <Select placeholder="Is the pet neutred?">
+                      <Option value={true}>Yes</Option>
+                      <Option value={false}>No</Option>
+                    </Select>
+                  </Item>
+                  <Item
+                    name="vaccinations_up_to_date"
+                    label="Vaccinations Up-to-Date?"
+                    rules={[{ required: false }]}
+                  >
+                    <Select placeholder="Vaccinations Up-to-Date?">
+                      <Option value={true}>Yes</Option>
+                      <Option value={false}>No</Option>
+                    </Select>
+                  </Item>
+
+                  <Item
+                    name="description"
+                    label="Description"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Description field is required",
+                      },
+                    ]}
+                  >
+                    <TextArea placeholder="Pet requirements, preferences..." />
+                  </Item>
+
+                  <Button
+                    block
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                  >
+                    Submit
+                  </Button>
                 </Form>
               </Card>
             </Col>
@@ -122,7 +245,7 @@ const CreatePost = (props) => {
 
 const styles = {
   mainRow: { padding: 24 },
-  content: { margin: "50px 16px 0", overflow: "initial" },
+  content: { margin: "50px 16px 0", overflow: "initial", marginBottom: "50px" },
 };
 
 export default CreatePost;

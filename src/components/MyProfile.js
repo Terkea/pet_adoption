@@ -146,7 +146,6 @@ const MyProfile = (props) => {
                   wrapperCol={{ span: 16 }}
                   form={form}
                   name="normal_login"
-                  className="login-form"
                   initialValues={{
                     remember: true,
                   }}
