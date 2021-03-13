@@ -16,12 +16,13 @@ import {
 } from "antd";
 
 import Navigation from "./Navigation";
+import petTypes from "../helpers/types_breeds.json";
+import uuid from "react-uuid";
 
 import { InboxOutlined } from "@ant-design/icons";
 import { storage } from "../createStore";
 
 import { useFirestore } from "react-redux-firebase";
-import uuid from "react-uuid";
 import { runNotifications } from "../helpers/Notification";
 
 const { Title } = Typography;
@@ -31,11 +32,23 @@ const { Option } = Select;
 const { Item } = Form;
 const { TextArea } = Input;
 
+let pictures = [];
 const CreatePost = (props) => {
   const [form] = Form.useForm();
   const firestore = useFirestore();
   const [fileList, updateFileList] = useState([]);
-  const [pictures, setPictures] = useState([]);
+  const [selectedBreed, setSelectedBreed] = useState([
+    {
+      value: "Pet Type (Any)",
+    },
+  ]);
+
+  const updateOptions = (values) => {
+    let arr = petTypes[values].map((i) => {
+      return { value: i };
+    });
+    setSelectedBreed(arr);
+  };
 
   const customUpload = ({ onError, onSuccess, file }) => {
     const metadata = {
@@ -48,7 +61,7 @@ const CreatePost = (props) => {
     const image = imgFile.put(file, metadata);
     image.then((snapshot) => {
       onSuccess(null, image);
-      setPictures(...pictures, imageName);
+      pictures.push(`${imageName}.jpg`);
       console.log("imageName", imageName);
       message.success(`File uploaded successfully.`);
       console.log("pictures", pictures);
@@ -79,6 +92,7 @@ const CreatePost = (props) => {
         .add(validValues)
         .then(() => {
           runNotifications("Post created successfully", "SUCCESS");
+          // TODO: add redirect to post
         });
     } catch (e) {
       runNotifications("You need to upload at least one picture", "ERROR");
@@ -138,9 +152,14 @@ const CreatePost = (props) => {
                       { required: true, message: "Pet type field is required" },
                     ]}
                   >
-                    <Select placeholder="Pet type">
-                      <Option value={true}>Yes</Option>
-                      <Option value={false}>No</Option>
+                    <Select onChange={updateOptions} placeholder="Pet type">
+                      {Object.keys(petTypes).map((i) => {
+                        return (
+                          <Option key={i} value={i}>
+                            {i}
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Item>
                   <Item
@@ -150,13 +169,25 @@ const CreatePost = (props) => {
                       { required: true, message: "Breed field is required" },
                     ]}
                   >
-                    <Select placeholder="Select province">
-                      <Option value="Zhejiang">Zhejiang</Option>
-                      <Option value="Jiangsu">Jiangsu</Option>
-                    </Select>
+                    <Select
+                      placeholder="Select breed"
+                      options={selectedBreed}
+                    ></Select>
                   </Item>
 
                   <Item name="age" label="Age" rules={[{ required: false }]}>
+                    <Input />
+                  </Item>
+                  <Item
+                    name="Location"
+                    label="Location"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Location field is mandatory",
+                      },
+                    ]}
+                  >
                     <Input />
                   </Item>
                   <Item
