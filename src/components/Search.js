@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 import {
   Row,
@@ -13,9 +13,16 @@ import {
   Layout,
   Card,
   Tooltip,
+  Avatar,
+  Space,
 } from "antd";
 
-import { MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  MessageOutlined,
+  LikeOutlined,
+  StarOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
 import Navigation from "./Navigation";
 
 const { Title, Text } = Typography;
@@ -29,47 +36,52 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const data = [
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires.",
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires.",
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires.",
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires.",
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires.",
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires.",
-];
+const listData = [];
+for (let i = 0; i < 1; i++) {
+  listData.push({
+    href: "https://ant.design",
+    title: `ant design part ${i}`,
+    avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+    description:
+      "Ant Design, a design language for background applications, is refined by Ant UED Team.",
+    content:
+      "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
+  });
+}
+
 const Search = (props) => {
   // GETTING THE PARAMS
   let query = useQuery();
-  const city = query.get("city");
-  const petType = query.get("petType");
-  const breed = query.get("breed");
-
+  const history = useHistory();
   const [form] = Form.useForm();
+
   const [collapsed, setCollapsed] = useState(false);
+  const [city, setCity] = useState(query.get("city"));
+  const [petType, setPetType] = useState(query.get("petType"));
+  const [breed, setBreed] = useState(query.get("breed"));
+
+  const filter = (values) => {
+    console.log(values);
+    const { city, petType, breed } = values;
+    setCity(city);
+    setBreed(breed);
+    setPetType(petType);
+    history.push({
+      pathname: "/search",
+      search: `?city=${city || ""}&petType=${petType || ""}&breed=${
+        breed || ""
+      }`,
+    });
+
+    // do filter
+  };
+
+  const clearFilters = () => {
+    form.resetFields();
+    history.push({
+      pathname: "/search",
+    });
+  };
 
   useEffect(() => {
     form.setFieldsValue({
@@ -99,8 +111,10 @@ const Search = (props) => {
         <Form
           form={form}
           layout="horizontal"
-          labelCol={{ span: 24, offset: 2 }}
-          wrapperCol={{ span: 20, offset: 2 }}
+          onFinish={filter}
+          style={{ padding: "20px" }}
+          labelCol={{ span: 24, offset: 0 }}
+          wrapperCol={{ span: 24, offset: 0 }}
         >
           <Item label="City" name="city">
             <Input placeholder="London" />
@@ -115,12 +129,16 @@ const Search = (props) => {
               <Option value="demo">Demo</Option>
             </Select>
           </Item>
-          <Row justify="center" gutter={2}>
-            <Col span={20}>
-              <Button type="primary" block>
+          <Row>
+            <Col span={24}>
+              <Button type="primary" block htmlType="submit">
                 Filter
               </Button>
-              <Button block style={{ marginTop: "10px" }}>
+              <Button
+                block
+                style={{ marginTop: "10px" }}
+                onClick={() => clearFilters()}
+              >
                 Clear filters
               </Button>
             </Col>
@@ -143,14 +161,34 @@ const Search = (props) => {
         <Content style={styles.content}>
           <Title style={{ textAlign: "center" }}>Search results</Title>
           <Row style={styles.mainRow}>
-            <List
-              size="large"
-              header={<div>Header</div>}
-              footer={<div>Footer</div>}
-              bordered
-              dataSource={data}
-              renderItem={(item) => <List.Item>{item}</List.Item>}
-            />
+            <Col span={24}>
+              <List
+                itemLayout="vertical"
+                size="large"
+                dataSource={listData}
+                footer={<Text>Posted 20 minutes ago</Text>}
+                renderItem={(item) => (
+                  <List.Item
+                    key={item.title}
+                    extra={
+                      <img
+                        style={{ maxWidth: "100%" }}
+                        width={272}
+                        alt="logo"
+                        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                      />
+                    }
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar src={item.avatar} />}
+                      title={<a href={item.href}>Title</a>}
+                      description="Cat, persain  - Luton, Bedfordshire "
+                    />
+                    {item.content}
+                  </List.Item>
+                )}
+              />
+            </Col>
           </Row>
         </Content>
       </Layout>
@@ -162,7 +200,7 @@ const styles = {
   rowMain: { minHeight: "100vh", overflow: "auto" },
   content: { margin: "50px 16px 0", overflow: "initial" },
   colPosts: { marginTop: "100px" },
-  mainRow: { padding: 24, background: "#fff", textAlign: "center" },
+  mainRow: { padding: 24, background: "#fff" },
   titleFilters: { textAlign: "center", marginBottom: "50px" },
   buttonToggle: { marginTop: "50px" },
   sidebar: {
