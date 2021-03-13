@@ -3,7 +3,12 @@ import { Layout, Menu, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import { useFirebase, isEmpty } from "react-redux-firebase";
 import { useSelector } from "react-redux";
-import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  DashboardOutlined,
+} from "@ant-design/icons";
 
 const { Header } = Layout;
 
@@ -52,6 +57,15 @@ const Navigation = (props) => {
             <Tooltip placement="bottom" title="My profile">
               <Link to="/my_profile">
                 <UserOutlined style={{ width: "100%" }} />
+              </Link>
+            </Tooltip>
+          </Menu.Item>
+        ) : null}
+        {!isEmpty(auth) ? (
+          <Menu.Item key="/dashboard">
+            <Tooltip placement="bottom" title="Adoption dashboard">
+              <Link to="/dashboard">
+                <DashboardOutlined style={{ width: "100%" }} />
               </Link>
             </Tooltip>
           </Menu.Item>

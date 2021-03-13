@@ -36,21 +36,6 @@ const MyProfile = (props) => {
 
   const [form] = Form.useForm();
   const { Content } = Layout;
-  const styles = {
-    logo: {
-      fontSize: "100px",
-      width: "100%",
-      marginBottom: "30px",
-    },
-    mainRow: {
-      paddingTop: "30px",
-    },
-    content: {
-      margin: "150px 16px 0",
-      overflow: "initial",
-      minHeight: "100vh",
-    },
-  };
 
   const history = useHistory();
   useEffect(() => {
@@ -294,5 +279,21 @@ const enhance = connect(
     authError,
   })
 );
+
+const styles = {
+  logo: {
+    fontSize: "100px",
+    width: "100%",
+    marginBottom: "30px",
+  },
+  mainRow: {
+    paddingTop: "30px",
+  },
+  content: {
+    margin: "100px 16px 0",
+    overflow: "initial",
+    minHeight: "100vh",
+  },
+};
 
 export default enhance(MyProfile);

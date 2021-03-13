@@ -11,16 +11,11 @@ import {
   Button,
   Select,
   Layout,
-  Card,
   Tooltip,
   Avatar,
-  Space,
 } from "antd";
 
 import {
-  MessageOutlined,
-  LikeOutlined,
-  StarOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import Navigation from "./Navigation";
@@ -28,7 +23,7 @@ import Navigation from "./Navigation";
 const { Title, Text } = Typography;
 const { Item } = Form;
 const { Option } = Select;
-const { Sider, Content, Header } = Layout;
+const { Sider, Content } = Layout;
 
 // HOW TO GRAB THE QUERY PARAMS FROM THE URL
 // https://stackoverflow.com/questions/52652661/how-to-get-query-string-using-react

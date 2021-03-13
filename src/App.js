@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import MyProfile from "./components/MyProfile";
 import Search from "./components/Search";
+import AdoptionDashboard from "./components/AdoptionDashboard";
 
 import "antd/dist/antd.less"; // or 'antd/dist/antd.less'
 import "./App.css";
@@ -21,11 +22,12 @@ const App = (props) => {
       <ReactReduxFirebaseProvider {...rrfProps}>
         <Router>
           <Switch>
+            <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
 
             <Route exact path="/search" component={Search} />
-            <Route exact path="/" component={Home} />
+            <Route exact path="/dashboard" component={AdoptionDashboard} />
             <Route exact path="/my_profile" component={MyProfile} />
           </Switch>
         </Router>
