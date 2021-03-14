@@ -15,6 +15,7 @@ import {
   Tooltip,
 } from "antd";
 
+import { useSelector } from "react-redux";
 import Navigation from "./Navigation";
 import petTypes from "../helpers/types_breeds.json";
 import uuid from "react-uuid";
@@ -33,10 +34,11 @@ const { Item } = Form;
 const { TextArea } = Input;
 
 let pictures = [];
-const CreatePost = (props) => {
+const CreatePost = () => {
   const [form] = Form.useForm();
   const firestore = useFirestore();
   const [fileList, updateFileList] = useState([]);
+  const auth = useSelector((state) => state.firebase.auth);
   const [selectedBreed, setSelectedBreed] = useState([
     {
       value: "Pet Type (Any)",
@@ -50,7 +52,7 @@ const CreatePost = (props) => {
     setSelectedBreed(arr);
   };
 
-  const customUpload = ({ onError, onSuccess, file }) => {
+  const customUpload = ({ onSuccess, file }) => {
     const metadata = {
       contentType: "image/jpeg",
     };
@@ -59,7 +61,7 @@ const CreatePost = (props) => {
 
     const imgFile = storageRef.child(`pets/${imageName}.jpg`);
     const image = imgFile.put(file, metadata);
-    image.then((snapshot) => {
+    image.then(() => {
       onSuccess(null, image);
       pictures.push(`${imageName}.jpg`);
       console.log("imageName", imageName);
@@ -84,8 +86,12 @@ const CreatePost = (props) => {
       Object.entries(values).filter(([_, v]) => v != null)
     );
     validValues.pictures = pictures;
-    console.log(pictures);
-    console.log(validValues);
+    validValues.userId = auth.uid;
+    validValues.date = new Date();
+    validValues.views = 0;
+    // if status = true it means that the post is still valid,
+    // otherwise the pet was adopted
+    validValues.status = true;
     try {
       return firestore
         .collection("posts")

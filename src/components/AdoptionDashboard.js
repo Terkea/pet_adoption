@@ -1,73 +1,105 @@
 import React from "react";
 
-import { Row, Col, Typography, Button, Layout, Table, Tag, Space } from "antd";
+import { Row, Col, Typography, Button, Layout, Table, Space } from "antd";
 
-import {} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useFirestoreConnect } from "react-redux-firebase";
+import { useFirestore } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const AdoptionDashboard = (props) => {
+  const firestore = useFirestore();
+  const history = useHistory();
+  const auth = useSelector((state) => state.firebase.auth);
+  // query for all posts using the userId
+  useFirestoreConnect([
+    {
+      collection: "posts",
+      userId: auth.uid,
+    },
+  ]);
+
+  const posts = useSelector(({ firestore: { data } }) => data.posts) || [];
+
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Title",
+      dataIndex: "title",
     },
     {
-      title: "Chinese Score",
-      dataIndex: "chinese",
+      title: "Type",
+      dataIndex: "pet_type",
     },
     {
-      title: "Math Score",
-      dataIndex: "math",
+      title: "Breed",
+      dataIndex: "breed",
     },
     {
-      title: "English Score",
-      dataIndex: "english",
+      title: "Views",
+      dataIndex: "views",
+    },
+    {
+      title: "Adopted?",
+      dataIndex: "status",
+      render: (text, record, index) => {
+        return text ? (
+          <Button
+            value="small"
+            onClick={() => {
+              markAsAdopted(record.key);
+            }}
+          >
+            Mark as adopted
+          </Button>
+        ) : (
+          <Text color={"green"}>Adopted</Text>
+        );
+      },
     },
     {
       title: "Action",
       key: "action",
-      render: () => (
+      render: (text, record, index) => (
         <Space size="middle">
-          <Tag color={"blue"}>Update </Tag>
-          <Tag color={"red"}>Delete</Tag>
+          <Button
+            onClick={() => {
+              updatePost(record.key);
+            }}
+            value="small"
+          >
+            <EditOutlined />
+          </Button>
+          <Button
+            onClick={() => {
+              deletePost(record.key);
+            }}
+            danger
+            value="small"
+          >
+            <DeleteOutlined />
+          </Button>
         </Space>
       ),
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      chinese: 98,
-      math: 60,
-      english: 70,
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      chinese: 98,
-      math: 66,
-      english: 89,
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      chinese: 98,
-      math: 90,
-      english: 70,
-    },
-    {
-      key: "4",
-      name: "Jim Red",
-      chinese: 88,
-      math: 99,
-      english: 89,
-    },
-  ];
+  const markAsAdopted = (docId) => {
+    firestore.collection("posts").doc(docId).update({ status: false });
+  };
+
+  const deletePost = (docId) => {
+    firestore.collection("posts").doc(docId).delete();
+  };
+
+  const updatePost = (docId) => {
+    history.push(`/post/${docId}`);
+  };
 
   return (
     <Layout style={{ width: "100%", height: "100vh" }}>
@@ -86,16 +118,21 @@ const AdoptionDashboard = (props) => {
           <Row justify="center">
             <Col span={20}>
               <Button type="primary" style={{ marginTop: "20px" }}>
-                Create new post
+                <Link to="/create_post">Create new post</Link>
               </Button>
               <Table
+                rowKey="key"
                 style={{
                   marginTop: "10px",
                   background: "white",
-                  //   paddingRight: "24px",
                 }}
                 columns={columns}
-                dataSource={data}
+                // posts returns an object of all docs in the query
+                // transform the object of objects into an array of objects
+                // and appending to that the docId as key
+                dataSource={Object.keys(posts).map((i) => {
+                  return { ...posts[i], key: i };
+                })}
               />
             </Col>
           </Row>
