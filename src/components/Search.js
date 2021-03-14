@@ -44,20 +44,32 @@ const Search = (props) => {
   const [city, setCity] = useState(query.get("city"));
   const [petType, setPetType] = useState(query.get("petType"));
   const [breed, setBreed] = useState(query.get("breed"));
-
   const [selectedBreed, setSelectedBreed] = useState([]);
 
-  // query for all posts using the userId
   // if params are mentioned used them in query. otherwise dont
+  let queryPosts = [["status", "==", true]];
+  if (city) {
+    queryPosts = [
+      ["city", "==", city],
+      ...queryPosts.filter((i) => i[0] !== "city"),
+    ];
+  }
+  if (breed) {
+    queryPosts = [
+      ["breed", "==", breed],
+      ...queryPosts.filter((i) => i[0] !== "breed"),
+    ];
+  }
+  if (petType) {
+    queryPosts = [
+      ["pet_type", "==", petType],
+      ...queryPosts.filter((i) => i[0] !== "pet_type"),
+    ];
+  }
   useFirestoreConnect([
     {
       collection: "posts",
-      where: [
-        ["status", "==", true],
-        ["city", "==", city],
-        ["breed", "==", breed],
-        ["pet_type", "==", petType],
-      ],
+      where: queryPosts,
     },
   ]);
   const posts = useSelector(({ firestore: { data } }) => data.posts) || [];
@@ -78,8 +90,6 @@ const Search = (props) => {
       pathname: "/search",
       search: `?city=${city || ""}&petType=${type || ""}&breed=${breed || ""}`,
     });
-
-    // do filter
   };
 
   const clearFilters = () => {
@@ -95,6 +105,8 @@ const Search = (props) => {
       type: petType,
       breed: breed,
     });
+    // if theres a type in the url update the breed selector options
+    if (petType) updateOptions(petType);
   }, [form, city, petType, breed]);
 
   return (
