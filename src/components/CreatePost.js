@@ -15,7 +15,7 @@ import {
   Tooltip,
   AutoComplete,
 } from "antd";
-
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Navigation from "./Navigation";
 import petTypes from "../helpers/types_breeds.json";
@@ -37,6 +37,7 @@ const { TextArea } = Input;
 
 let pictures = [];
 const CreatePost = () => {
+  const history = useHistory();
   const [form] = Form.useForm();
   const firestore = useFirestore();
   const [fileList, updateFileList] = useState([]);
@@ -110,6 +111,7 @@ const CreatePost = () => {
           .add(validValues)
           .then(() => {
             runNotifications("Post created successfully", "SUCCESS");
+            history.push("/dashboard");
             // TODO: add redirect to post
           });
       } catch (e) {

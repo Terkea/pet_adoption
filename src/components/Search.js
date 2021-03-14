@@ -97,6 +97,7 @@ const Search = (props) => {
 
   const clearFilters = () => {
     form.resetFields();
+    setCity("");
     history.push({
       pathname: "/search",
     });
@@ -180,11 +181,11 @@ const Search = (props) => {
             onSelect={onSelect}
             options={options}
             dropdownMatchSelectWidth={252}
-            defaultValue={city}
+            defaultValue={city || ""}
             style={{ width: "100%", marginTop: "8px" }}
             label="city"
           >
-            <Input placeholder="London" />
+            <Input name="city" placeholder="London" />
           </AutoComplete>
           <Item label="Type" name="type">
             <Select onChange={updateOptions}>

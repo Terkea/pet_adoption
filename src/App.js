@@ -7,6 +7,7 @@ import Register from "./components/Register";
 import MyProfile from "./components/MyProfile";
 import Search from "./components/Search";
 import CreatePost from "./components/CreatePost";
+import Post from "./components/Post";
 import AdoptionDashboard from "./components/AdoptionDashboard";
 
 import "antd/dist/antd.less"; // or 'antd/dist/antd.less'
@@ -30,6 +31,7 @@ const App = (props) => {
             <Route exact path="/search" component={Search} />
             <Route exact path="/dashboard" component={AdoptionDashboard} />
             <Route exact path="/my_profile" component={MyProfile} />
+            <Route exact path="/post/:id" component={Post} />
           </Switch>
         </Router>
       </ReactReduxFirebaseProvider>

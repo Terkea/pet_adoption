@@ -1,6 +1,14 @@
 ## Todos:
 
-navbar icon bug - create context for global state
+add autofill for city in search and createpost -- DONE
 filter functionality -- DONE
+
+
+BUG DELETE POST ??? idk how to reproduce
+BUG TABLE 
+BUG MOMENT IN SEARCH PAGE
+
+navbar icon bug - create context for global state
 view post edit post - add post views
-add autofill for city in search and createpost
+ADD PADING TO HOMEPAGE MAIN SECTIONS
+ADD PROTECTED ROUTES
