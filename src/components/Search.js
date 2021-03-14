@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, Link } from "react-router-dom";
 
 import {
   Row,
@@ -13,12 +13,18 @@ import {
   Layout,
   Tooltip,
   Avatar,
+  Divider,
 } from "antd";
 
-import {
-  MenuUnfoldOutlined,
-} from "@ant-design/icons";
+import { MenuUnfoldOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
+import petTypes from "../helpers/types_breeds.json";
+import { useFirestoreConnect } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+import { storage } from "../createStore";
+import { isLoaded, isEmpty } from "react-redux-firebase/lib/utils";
+
+import Moment from "react-moment";
 
 const { Title, Text } = Typography;
 const { Item } = Form;
@@ -31,19 +37,6 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const listData = [];
-for (let i = 0; i < 1; i++) {
-  listData.push({
-    href: "https://ant.design",
-    title: `ant design part ${i}`,
-    avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    description:
-      "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-    content:
-      "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
-  });
-}
-
 const Search = (props) => {
   // GETTING THE PARAMS
   let query = useQuery();
@@ -55,17 +48,35 @@ const Search = (props) => {
   const [petType, setPetType] = useState(query.get("petType"));
   const [breed, setBreed] = useState(query.get("breed"));
 
+  const [selectedBreed, setSelectedBreed] = useState([]);
+
+  // query for all posts using the userId
+  useFirestoreConnect([
+    {
+      collection: "posts",
+      status: true,
+      city: "whatever",
+      petType: petType,
+      breed: breed,
+    },
+  ]);
+  const posts = useSelector(({ firestore: { data } }) => data.posts) || [];
+
+  const updateOptions = (values) => {
+    let arr = petTypes[values].map((i) => {
+      return { value: i };
+    });
+    setSelectedBreed(arr);
+  };
+
   const filter = (values) => {
-    console.log(values);
-    const { city, petType, breed } = values;
+    const { city, type, breed } = values;
     setCity(city);
     setBreed(breed);
-    setPetType(petType);
+    setPetType(type);
     history.push({
       pathname: "/search",
-      search: `?city=${city || ""}&petType=${petType || ""}&breed=${
-        breed || ""
-      }`,
+      search: `?city=${city || ""}&petType=${type || ""}&breed=${breed || ""}`,
     });
 
     // do filter
@@ -115,14 +126,18 @@ const Search = (props) => {
             <Input placeholder="London" />
           </Item>
           <Item label="Type" name="type">
-            <Select>
-              <Option value="demo">Demo</Option>
+            <Select onChange={updateOptions}>
+              {Object.keys(petTypes).map((i) => {
+                return (
+                  <Option key={i} value={i}>
+                    {i}
+                  </Option>
+                );
+              })}
             </Select>
           </Item>
           <Item label="Breed" name="breed">
-            <Select>
-              <Option value="demo">Demo</Option>
-            </Select>
+            <Select options={selectedBreed}></Select>
           </Item>
           <Row>
             <Col span={24}>
@@ -155,34 +170,60 @@ const Search = (props) => {
         </div>
         <Content style={styles.content}>
           <Title style={{ textAlign: "center" }}>Search results</Title>
-          <Row style={styles.mainRow}>
-            <Col span={24}>
-              <List
-                itemLayout="vertical"
-                size="large"
-                dataSource={listData}
-                footer={<Text>Posted 20 minutes ago</Text>}
-                renderItem={(item) => (
-                  <List.Item
-                    key={item.title}
-                    extra={
-                      <img
-                        style={{ maxWidth: "100%" }}
-                        width={272}
-                        alt="logo"
-                        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+          <Row justify="center" style={styles.mainRow}>
+            <Col md={20} xs={20}>
+              {posts !== [] ? (
+                <List
+                  itemLayout="vertical"
+                  size="large"
+                  // posts returns an object of all docs in the query
+                  // transform the object of objects into an array of objects
+                  // and appending to that the docId as key
+                  dataSource={Object.keys(posts).map((i) => {
+                    return { ...posts[i], key: i };
+                  })}
+                  renderItem={(item) => (
+                    <List.Item
+                      key={item.key}
+                      style={{ background: "white", marginTop: "10px" }}
+                      extra={
+                        //firebase.google.com/docs/storage/web/download-files#create_a_reference
+                        <img
+                          style={{ maxWidth: "100%" }}
+                          width={300}
+                          alt="main_picture"
+                          src={`https://firebasestorage.googleapis.com/v0/b/${process.env.REACT_APP_STORAGE_BUCKET}/o/pets%2F${item.pictures[0]}?alt=media`}
+                        />
+                      }
+                    >
+                      <List.Item.Meta
+                        avatar={<Avatar src={item.avatar} />}
+                        title={
+                          <Link to={`post/${item.key}`}>{item.title}</Link>
+                        }
+                        description={
+                          <Text>
+                            {item.pet_type}, {item.breed}
+                          </Text>
+                        }
                       />
-                    }
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar} />}
-                      title={<a href={item.href}>Title</a>}
-                      description="Cat, persain  - Luton, Bedfordshire "
-                    />
-                    {item.content}
-                  </List.Item>
-                )}
-              />
+                      {item.description.length > 500 ? (
+                        <Text>{item.description.substr(0, 500) + "..."}</Text>
+                      ) : (
+                        <Text>{item.description}</Text>
+                      )}
+                      <br />
+                      {
+                        <Text>
+                          Posted <Moment fromNow>{item.date}</Moment>
+                        </Text>
+                      }
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <List loading={true} />
+              )}
             </Col>
           </Row>
         </Content>
@@ -195,7 +236,7 @@ const styles = {
   rowMain: { minHeight: "100vh", overflow: "auto" },
   content: { margin: "50px 16px 0", overflow: "initial" },
   colPosts: { marginTop: "100px" },
-  mainRow: { padding: 24, background: "#fff" },
+  mainRow: { padding: 24 },
   titleFilters: { textAlign: "center", marginBottom: "50px" },
   buttonToggle: { marginTop: "50px" },
   sidebar: {

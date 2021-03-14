@@ -87,7 +87,7 @@ const CreatePost = () => {
     );
     validValues.pictures = pictures;
     validValues.userId = auth.uid;
-    validValues.date = new Date();
+    validValues.timestamp = firestore.FieldValue.serverTimestamp();
     validValues.views = 0;
     // if status = true it means that the post is still valid,
     // otherwise the pet was adopted
@@ -185,7 +185,7 @@ const CreatePost = () => {
                     <Input />
                   </Item>
                   <Item
-                    name="Location"
+                    name="location"
                     label="Location"
                     rules={[
                       {

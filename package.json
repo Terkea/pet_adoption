@@ -13,6 +13,7 @@
     "firebase": "^7.17.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-moment": "^1.1.1",
     "react-redux": "^7.2.1",
     "react-redux-firebase": "^3.7.0",
     "react-responsive-image": "^5.0.0",
