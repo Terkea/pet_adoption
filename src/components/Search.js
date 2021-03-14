@@ -13,11 +13,13 @@ import {
   Layout,
   Tooltip,
   Avatar,
+  AutoComplete,
 } from "antd";
 
 import { MenuUnfoldOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
 import petTypes from "../helpers/types_breeds.json";
+import cities from "../helpers/uk_cities.json";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 
@@ -45,6 +47,7 @@ const Search = (props) => {
   const [petType, setPetType] = useState(query.get("petType"));
   const [breed, setBreed] = useState(query.get("breed"));
   const [selectedBreed, setSelectedBreed] = useState([]);
+  const [options, setOptions] = useState([]);
 
   // if params are mentioned used them in query. otherwise dont
   let queryPosts = [["status", "==", true]];
@@ -82,8 +85,8 @@ const Search = (props) => {
   };
 
   const filter = (values) => {
-    const { city, type, breed } = values;
-    setCity(city);
+    const { type, breed } = values;
+    // setCity(city);
     setBreed(breed);
     setPetType(type);
     history.push({
@@ -109,6 +112,43 @@ const Search = (props) => {
     if (petType) updateOptions(petType);
   }, [form, city, petType, breed]);
 
+  const handleSearch = (value) => {
+    let res = [];
+
+    if (value.length > 2) {
+      // eslint-disable-next-line array-callback-return
+      Object.keys(cities).map((city) => {
+        if (city.toLowerCase().includes(value)) {
+          return res.push({
+            value: city,
+            label: (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>
+                  {city}, {cities[city]}
+                </span>
+              </div>
+            ),
+          });
+        }
+      });
+    }
+
+    setOptions(res);
+  };
+
+  const onSelect = (value) => {
+    setCity(value);
+    history.push({
+      pathname: "/search",
+      search: `?city=${value}`,
+    });
+    console.log(value);
+  };
   return (
     <Layout>
       <Navigation />
@@ -134,9 +174,18 @@ const Search = (props) => {
           labelCol={{ span: 24, offset: 0 }}
           wrapperCol={{ span: 24, offset: 0 }}
         >
-          <Item label="City" name="city">
+          <Text>City:</Text>
+          <AutoComplete
+            onSearch={handleSearch}
+            onSelect={onSelect}
+            options={options}
+            dropdownMatchSelectWidth={252}
+            defaultValue={city}
+            style={{ width: "100%", marginTop: "8px" }}
+            label="city"
+          >
             <Input placeholder="London" />
-          </Item>
+          </AutoComplete>
           <Item label="Type" name="type">
             <Select onChange={updateOptions}>
               {Object.keys(petTypes).map((i) => {
@@ -215,7 +264,7 @@ const Search = (props) => {
                         }
                         description={
                           <Text>
-                            {item.pet_type}, {item.breed}
+                            {item.pet_type}, {item.breed}, {item.city}
                           </Text>
                         }
                       />

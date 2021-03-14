@@ -13,11 +13,13 @@ import {
   message,
   Select,
   Tooltip,
+  AutoComplete,
 } from "antd";
 
 import { useSelector } from "react-redux";
 import Navigation from "./Navigation";
 import petTypes from "../helpers/types_breeds.json";
+import cities from "../helpers/uk_cities.json";
 import uuid from "react-uuid";
 
 import { InboxOutlined } from "@ant-design/icons";
@@ -26,7 +28,7 @@ import { storage } from "../createStore";
 import { useFirestore } from "react-redux-firebase";
 import { runNotifications } from "../helpers/Notification";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Content } = Layout;
 const { Dragger } = Upload;
 const { Option } = Select;
@@ -38,6 +40,8 @@ const CreatePost = () => {
   const [form] = Form.useForm();
   const firestore = useFirestore();
   const [fileList, updateFileList] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [city, setCity] = useState("");
   const auth = useSelector((state) => state.firebase.auth);
   const [selectedBreed, setSelectedBreed] = useState([
     {
@@ -70,7 +74,7 @@ const CreatePost = () => {
     });
   };
 
-  const options = {
+  const uploadOptions = {
     fileList,
     name: "file",
     multiple: true,
@@ -81,28 +85,70 @@ const CreatePost = () => {
   };
 
   const onFinish = (values) => {
-    // get only the fields that have values
-    const validValues = Object.fromEntries(
-      Object.entries(values).filter(([_, v]) => v != null)
-    );
-    validValues.pictures = pictures;
-    validValues.userId = auth.uid;
-    validValues.timestamp = firestore.FieldValue.serverTimestamp();
-    validValues.views = 0;
-    // if status = true it means that the post is still valid,
-    // otherwise the pet was adopted
-    validValues.status = true;
-    try {
-      return firestore
-        .collection("posts")
-        .add(validValues)
-        .then(() => {
-          runNotifications("Post created successfully", "SUCCESS");
-          // TODO: add redirect to post
-        });
-    } catch (e) {
+    // debugger;
+    if (pictures.length === 0)
       runNotifications("You need to upload at least one picture", "ERROR");
+
+    if (city === "") runNotifications("City field is mandatory", "ERROR");
+
+    if (pictures.length > 0 && city !== "") {
+      // get only the fields that have values
+      const validValues = Object.fromEntries(
+        Object.entries(values).filter(([_, v]) => v != null)
+      );
+      validValues.pictures = pictures;
+      validValues.userId = auth.uid;
+      validValues.timestamp = firestore.FieldValue.serverTimestamp();
+      validValues.views = 0;
+      validValues.city = city;
+      // if status = true it means that the post is still valid,
+      // otherwise the pet was adopted
+      validValues.status = true;
+      try {
+        return firestore
+          .collection("posts")
+          .add(validValues)
+          .then(() => {
+            runNotifications("Post created successfully", "SUCCESS");
+            // TODO: add redirect to post
+          });
+      } catch (e) {
+        runNotifications("You need to upload at least one picture", "ERROR");
+      }
     }
+  };
+
+  const handleSearch = (value) => {
+    let res = [];
+
+    if (value.length > 2) {
+      // eslint-disable-next-line array-callback-return
+      Object.keys(cities).map((city) => {
+        if (city.toLowerCase().includes(value)) {
+          return res.push({
+            value: city,
+            label: (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>
+                  {city}, {cities[city]}
+                </span>
+              </div>
+            ),
+          });
+        }
+      });
+    }
+
+    setOptions(res);
+  };
+
+  const onSelect = (value) => {
+    setCity(value);
   };
   return (
     <Layout style={{ width: "100%", minHeight: "100vh" }}>
@@ -119,9 +165,9 @@ const CreatePost = () => {
             Create post
           </Title>
           <Row justify="center">
-            <Col md={8} xs={20}>
+            <Col md={8} xs={20} align="middle">
               <Card>
-                <Dragger customRequest={customUpload} {...options}>
+                <Dragger customRequest={customUpload} {...uploadOptions}>
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>
@@ -180,22 +226,21 @@ const CreatePost = () => {
                       options={selectedBreed}
                     ></Select>
                   </Item>
-
-                  <Item name="age" label="Age" rules={[{ required: false }]}>
-                    <Input />
-                  </Item>
-                  <Item
-                    name="city"
-                    label="City"
-                    rules={[
-                      {
-                        required: true,
-                        message: "City field is mandatory",
-                      },
-                    ]}
+                  <Text style={{ marginRight: "10px" }}>City:</Text>
+                  <AutoComplete
+                    onSearch={handleSearch}
+                    onSelect={onSelect}
+                    options={options}
+                    dropdownMatchSelectWidth={252}
+                    label="city"
+                    style={{
+                      width: "77%",
+                      // marginTop: "8px",
+                      marginBottom: "20px",
+                    }}
                   >
-                    <Input />
-                  </Item>
+                    <Input name="city" placeholder="London" />
+                  </AutoComplete>
                   <Item
                     name="microchiped"
                     label={

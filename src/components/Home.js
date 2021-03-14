@@ -4,10 +4,10 @@ import { Typography, Row, Col, Input, AutoComplete, Layout } from "antd";
 import { useHistory } from "react-router-dom";
 import Navigation from "./Navigation";
 
+import cities from "../helpers/uk_cities.json";
 // SVGS
 import picture from "../img/Untitled-2.png";
 import background from "../img/Background.png";
-import cities from "../helpers/uk_cities.json";
 import whyAdopting from "../img/3813540.svg";
 import didYouKnow from "../img/3767179.svg";
 import homelessPets from "../img/3824645.svg";
