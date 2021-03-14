@@ -185,12 +185,12 @@ const CreatePost = () => {
                     <Input />
                   </Item>
                   <Item
-                    name="location"
-                    label="Location"
+                    name="city"
+                    label="City"
                     rules={[
                       {
                         required: true,
-                        message: "Location field is mandatory",
+                        message: "City field is mandatory",
                       },
                     ]}
                   >

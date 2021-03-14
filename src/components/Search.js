@@ -13,7 +13,6 @@ import {
   Layout,
   Tooltip,
   Avatar,
-  Divider,
 } from "antd";
 
 import { MenuUnfoldOutlined } from "@ant-design/icons";
@@ -21,8 +20,6 @@ import Navigation from "./Navigation";
 import petTypes from "../helpers/types_breeds.json";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
-import { storage } from "../createStore";
-import { isLoaded, isEmpty } from "react-redux-firebase/lib/utils";
 
 import Moment from "react-moment";
 
@@ -51,13 +48,16 @@ const Search = (props) => {
   const [selectedBreed, setSelectedBreed] = useState([]);
 
   // query for all posts using the userId
+  // if params are mentioned used them in query. otherwise dont
   useFirestoreConnect([
     {
       collection: "posts",
-      status: true,
-      city: "whatever",
-      petType: petType,
-      breed: breed,
+      where: [
+        ["status", "==", true],
+        ["city", "==", city],
+        ["breed", "==", breed],
+        ["pet_type", "==", petType],
+      ],
     },
   ]);
   const posts = useSelector(({ firestore: { data } }) => data.posts) || [];
