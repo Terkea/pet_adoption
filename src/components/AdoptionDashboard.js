@@ -1,22 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Row, Col, Typography, Button, Layout, Table, Space } from "antd";
+import {
+  Row,
+  Col,
+  Typography,
+  Button,
+  Layout,
+  Table,
+  Space,
+  Drawer,
+  Select,
+  Tooltip,
+  Form,
+  Input,
+} from "antd";
 
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useFirestoreConnect } from "react-redux-firebase";
+import { isEmpty, useFirestoreConnect } from "react-redux-firebase";
 import { useFirestore } from "react-redux-firebase";
-import { useHistory } from "react-router-dom";
+import petTypes from "../helpers/types_breeds.json";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
+const { Option } = Select;
+const { Item } = Form;
+const { TextArea } = Input;
 
-const AdoptionDashboard = (props) => {
+const AdoptionDashboard = () => {
   const firestore = useFirestore();
-  const history = useHistory();
+  const [form] = Form.useForm();
   const auth = useSelector((state) => state.firebase.auth);
+  const [visible, setVisible] = useState(false);
+  const [post, setPost] = useState({});
+  const [selectedBreed, setSelectedBreed] = useState([
+    {
+      value: "Pet Type (Any)",
+    },
+  ]);
   // query for all posts using the userId
   useFirestoreConnect([
     {
@@ -47,7 +70,7 @@ const AdoptionDashboard = (props) => {
     {
       title: "Adopted?",
       dataIndex: "status",
-      render: (text, record, index) => {
+      render: (text, record) => {
         return text ? (
           <Button
             value="small"
@@ -65,7 +88,7 @@ const AdoptionDashboard = (props) => {
     {
       title: "Action",
       key: "action",
-      render: (text, record, index) => (
+      render: (text, record) => (
         <Space size="middle">
           <Button
             onClick={() => {
@@ -97,14 +120,184 @@ const AdoptionDashboard = (props) => {
     firestore.collection("posts").doc(docId).delete();
   };
 
+  const onFinish = (values) => {
+    // console.log(values, post[0].key);
+    firestore
+      .collection("posts")
+      .doc(post[0].key)
+      .update(
+        Object.fromEntries(Object.entries(values).filter(([_, v]) => v != null))
+      );
+    onClose();
+  };
+
+  const updateOptions = (values) => {
+    let arr = petTypes[values].map((i) => {
+      return { value: i };
+    });
+    setSelectedBreed(arr);
+  };
+
   const updatePost = (docId) => {
-    history.push(`/post/${docId}`);
+    // eslint-disable-next-line array-callback-return
+    let search = Object.keys(posts).map((i) => {
+      if (i === docId) return { ...posts[i], key: i };
+    });
+    setPost(search);
+
+    form.setFieldsValue({
+      title: search[0].title,
+      pet_type: search[0].pet_type,
+      breed: search[0].breed,
+      microchiped: search[0].microchiped,
+      neutred: search[0].neutred,
+      registered: search[0].registered,
+      vaccinations_up_to_date: search[0].vaccinations_up_to_date,
+      description: search[0].description,
+    });
+
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
   };
 
   return (
     <Layout style={{ width: "100%", height: "100vh" }}>
       <Navigation />
       <Layout>
+        {!isEmpty(post) ? (
+          <Drawer
+            title="Update post"
+            placement="right"
+            closable={false}
+            width={520}
+            onClose={onClose}
+            visible={visible}
+          >
+            <Form
+              form={form}
+              onFinish={onFinish}
+              layout="horizontal"
+              style={{ marginTop: "20px" }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 14 }}
+            >
+              <Item
+                name="title"
+                label="Post title"
+                rules={[{ required: true, message: "Title field is required" }]}
+              >
+                <Input />
+              </Item>
+              <Item
+                name="pet_type"
+                label="Pet Type"
+                rules={[
+                  { required: true, message: "Pet type field is required" },
+                ]}
+              >
+                <Select onChange={updateOptions} placeholder="Pet type">
+                  {Object.keys(petTypes).map((i) => {
+                    return (
+                      <Option key={i} value={i}>
+                        {i}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Item>
+              <Item
+                name="breed"
+                label="Breed"
+                rules={[{ required: true, message: "Breed field is required" }]}
+              >
+                <Select
+                  placeholder="Select breed"
+                  options={selectedBreed}
+                ></Select>
+              </Item>
+
+              <Item
+                name="microchiped"
+                label={
+                  <Tooltip
+                    title="Microchipping a pet is the process of implanting a chip under the 
+                      pets skin and registering the keepers details on a national database so
+                      that the keeper can be traced."
+                  >
+                    Microchiped?
+                  </Tooltip>
+                }
+                rules={[{ required: false }]}
+              >
+                <Select placeholder="Is the pet microchiped?">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Item>
+              <Item
+                name="registered"
+                label="Registered?"
+                rules={[{ required: false }]}
+              >
+                <Select placeholder="Is the pet registered?">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Item>
+              <Item
+                name="neutred"
+                label={
+                  <Tooltip title="Neutering is a small surgical operation performed by a vet to prevent the animal from being able to have babies.">
+                    Neutred?
+                  </Tooltip>
+                }
+                rules={[{ required: false }]}
+              >
+                <Select placeholder="Is the pet neutred?">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Item>
+              <Item
+                name="vaccinations_up_to_date"
+                label="Vaccinations Up-to-Date?"
+                rules={[{ required: false }]}
+              >
+                <Select placeholder="Vaccinations Up-to-Date?">
+                  <Option value={true}>Yes</Option>
+                  <Option value={false}>No</Option>
+                </Select>
+              </Item>
+
+              <Item
+                name="description"
+                label="Description"
+                rules={[
+                  {
+                    required: true,
+                    message: "Description field is required",
+                  },
+                ]}
+              >
+                <TextArea placeholder="Pet requirements, preferences..." />
+              </Item>
+
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Update
+              </Button>
+            </Form>
+          </Drawer>
+        ) : (
+          "Loading..."
+        )}
         <Content style={styles.content}>
           <Title
             style={{
