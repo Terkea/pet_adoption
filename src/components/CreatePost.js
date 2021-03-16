@@ -44,6 +44,7 @@ const CreatePost = () => {
   const [options, setOptions] = useState([]);
   const [city, setCity] = useState("");
   const auth = useSelector((state) => state.firebase.auth);
+  const profile = useSelector((state) => state.firebase.profile);
   const [selectedBreed, setSelectedBreed] = useState([
     {
       value: "Pet Type (Any)",
@@ -94,21 +95,23 @@ const CreatePost = () => {
 
     if (pictures.length > 0 && city !== "") {
       // get only the fields that have values
-      const validValues = Object.fromEntries(
+      const newPost = Object.fromEntries(
         Object.entries(values).filter(([_, v]) => v != null)
       );
-      validValues.pictures = pictures;
-      validValues.userId = auth.uid;
-      validValues.timestamp = firestore.FieldValue.serverTimestamp();
-      validValues.views = 0;
-      validValues.city = city;
+      newPost.pictures = pictures;
+      newPost.userId = auth.uid;
+      newPost.timestamp = firestore.FieldValue.serverTimestamp();
+      newPost.views = 0;
+      newPost.city = city;
+      newPost.userAvatar = profile.photoURL;
+      newPost.phone = profile.phoneNo;
       // if status = true it means that the post is still valid,
       // otherwise the pet was adopted
-      validValues.status = true;
+      newPost.status = true;
       try {
         return firestore
           .collection("posts")
-          .add(validValues)
+          .add(newPost)
           .then(() => {
             runNotifications("Post created successfully", "SUCCESS");
             history.push("/dashboard");

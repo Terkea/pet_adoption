@@ -148,7 +148,6 @@ const Search = (props) => {
       pathname: "/search",
       search: `?city=${value}`,
     });
-    console.log(value);
   };
   return (
     <Layout>
@@ -259,7 +258,11 @@ const Search = (props) => {
                       }
                     >
                       <List.Item.Meta
-                        avatar={<Avatar src={item.avatar} />}
+                        avatar={
+                          <Avatar
+                            src={`https://firebasestorage.googleapis.com/v0/b/${process.env.REACT_APP_STORAGE_BUCKET}/o/avatar%2F${item.userAvatar}?alt=media`}
+                          />
+                        }
                         title={
                           <Link to={`post/${item.key}`}>{item.title}</Link>
                         }
@@ -277,7 +280,7 @@ const Search = (props) => {
                       <br />
                       {
                         <Text>
-                          Posted <Moment fromNow>{item.date}</Moment>
+                          Posted <Moment fromNow>{item.timestamp}</Moment>
                         </Text>
                       }
                     </List.Item>
