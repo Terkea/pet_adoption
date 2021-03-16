@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { isEmpty, useFirestoreConnect } from "react-redux-firebase";
 import { useFirestore } from "react-redux-firebase";
 import petTypes from "../helpers/types_breeds.json";
+import { runNotifications } from "../helpers/Notification";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -121,7 +122,6 @@ const AdoptionDashboard = () => {
   };
 
   const onFinish = (values) => {
-    // console.log(values, post[0].key);
     firestore
       .collection("posts")
       .doc(post[0].key)
@@ -129,6 +129,7 @@ const AdoptionDashboard = () => {
         Object.fromEntries(Object.entries(values).filter(([_, v]) => v != null))
       );
     onClose();
+    runNotifications("Post updated successfully", "SUCCESS");
   };
 
   const updateOptions = (values) => {
@@ -165,7 +166,7 @@ const AdoptionDashboard = () => {
 
   return (
     <Layout style={{ width: "100%", height: "100vh" }}>
-      <Navigation />
+      <Navigation {...{ selectedKey: "/dashboard" }} />
       <Layout>
         {!isEmpty(post) ? (
           <Drawer

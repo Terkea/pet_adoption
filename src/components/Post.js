@@ -51,7 +51,7 @@ const Post = (props) => {
 
   return (
     <Layout>
-      <Navigation />
+      <Navigation {...{ selectedKey: "/" }} />
       <Content style={styles.content}>
         <Title style={{ textAlign: "center", marginTop: "100px" }}>
           {post.title}
@@ -144,7 +144,7 @@ const Post = (props) => {
                       src={`https://firebasestorage.googleapis.com/v0/b/${process.env.REACT_APP_STORAGE_BUCKET}/o/avatar%2F${post.userAvatar}?alt=media`}
                     />
                     <Title level={4} style={{ textAlign: "center" }}>
-                      Avram Iancu
+                      {post.username || "Anonym"}
                     </Title>
                   </div>
                   <Button

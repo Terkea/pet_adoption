@@ -60,7 +60,7 @@ const Home = (props) => {
 
   return (
     <Layout>
-      <Navigation />
+      <Navigation {...{ selectedKey: "/" }} />
       {props.payload ? (
         <b>Hi {props.payload.user.email}</b>
       ) : (

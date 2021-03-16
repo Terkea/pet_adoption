@@ -15,7 +15,6 @@ const { Header } = Layout;
 const Navigation = (props) => {
   const auth = useSelector((state) => state.firebase.auth);
   const firebase = useFirebase();
-
   return (
     <Header
       style={{
@@ -28,7 +27,7 @@ const Navigation = (props) => {
       }}
     >
       <div className="logo" />
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["/"]}>
+      <Menu theme="dark" mode="horizontal" selectedKeys={[props.selectedKey]}>
         <Menu.Item key="/">
           <Tooltip placement="bottom" title="Home">
             <Link to="/">

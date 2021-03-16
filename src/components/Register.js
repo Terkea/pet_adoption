@@ -7,6 +7,7 @@ import {
   RocketOutlined,
   MailOutlined,
   UserOutlined,
+  PhoneOutlined,
 } from "@ant-design/icons";
 
 import SvgBackground from "../containers/SvgBackground";
@@ -69,6 +70,7 @@ const Register = (props) => {
         {
           username: values.username,
           email: values.email,
+          phoneNo: values.telephone,
         }
       )
       .then(() => {
@@ -125,6 +127,21 @@ const Register = (props) => {
               <Input
                 placeholder="Username"
                 prefix={<UserOutlined className="site-form-item-icon" />}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="telephone"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your telephone number!",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Mobile Number"
+                prefix={<PhoneOutlined className="site-form-item-icon" />}
               />
             </Form.Item>
 

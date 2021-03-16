@@ -81,7 +81,6 @@ const Login = (props) => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
     firebase
       .login({ email: values.email, password: values.password })
       .then(() => history.push("/"));
@@ -95,7 +94,6 @@ const Login = (props) => {
         onOk={onOkModal}
         onCancel={() => {
           setModalVisibility(false);
-          console.log("Something is fucked");
         }}
       >
         <LockOutlined style={styles.logo} />

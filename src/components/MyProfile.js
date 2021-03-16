@@ -85,7 +85,6 @@ const MyProfile = (props) => {
               });
             })
             .catch((e) => {
-              console.log();
               runNotifications(e.message, "ERROR");
             });
         });
@@ -122,7 +121,7 @@ const MyProfile = (props) => {
 
   return (
     <Layout>
-      <Navigation />
+      <Navigation {...{ selectedKey: "/my_profile" }} />
       <Content style={styles.content}>
         <Title style={{ textAlign: "center" }}>My profile</Title>
         <Row justify="center" style={styles.mainRow}>

@@ -59,6 +59,7 @@ const CreatePost = () => {
   };
 
   const customUpload = ({ onSuccess, file }) => {
+    debugger;
     const metadata = {
       contentType: "image/jpeg",
     };
@@ -87,7 +88,7 @@ const CreatePost = () => {
   };
 
   const onFinish = (values) => {
-    // debugger;
+    debugger;
     if (pictures.length === 0)
       runNotifications("You need to upload at least one picture", "ERROR");
 
@@ -100,10 +101,11 @@ const CreatePost = () => {
       );
       newPost.pictures = pictures;
       newPost.userId = auth.uid;
-      newPost.timestamp = firestore.FieldValue.serverTimestamp();
+      newPost.timestamp = new Date().toISOString();
       newPost.views = 0;
       newPost.city = city;
-      newPost.userAvatar = profile.photoURL;
+      newPost.userAvatar = profile.photoURL || "";
+      newPost.userNickname = profile.username || "";
       newPost.phone = profile.phoneNo;
       // if status = true it means that the post is still valid,
       // otherwise the pet was adopted
@@ -157,7 +159,7 @@ const CreatePost = () => {
   };
   return (
     <Layout style={{ width: "100%", minHeight: "100vh" }}>
-      <Navigation />
+      <Navigation {...{ selectedKey: "/dashboard" }} />
       <Layout>
         <Content style={styles.content}>
           <Title

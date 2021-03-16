@@ -151,7 +151,7 @@ const Search = (props) => {
   };
   return (
     <Layout>
-      <Navigation />
+      <Navigation {...{ selectedKey: "/" }} />
 
       <Sider
         collapsible
