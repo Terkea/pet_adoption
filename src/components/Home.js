@@ -121,7 +121,7 @@ const Home = (props) => {
               <Title level={4}>Did you know?</Title>
               <Text style={styles.text}>
                 Almost 6.5 million animals enter shelters worldwide and 1.5 of
-                which are euthanized. adopting allows these animals to
+                which are euthanized. Adopting allows these animals to
                 experience life again.
               </Text>
             </Col>

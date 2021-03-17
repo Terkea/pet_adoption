@@ -1,5 +1,8 @@
 [![Deploy to Firebase Hosting on merge](https://github.com/Terkea/pet_adoption/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=master)](https://github.com/Terkea/pet_adoption/actions/workflows/firebase-hosting-merge.yml)
 
+
+[![Docker Image CI](https://github.com/Terkea/pet_adoption/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/Terkea/pet_adoption/actions/workflows/docker-image.yml)
+
 ## Todos:
 
 add autofill for city in search and createpost -- DONE
