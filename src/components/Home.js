@@ -9,7 +9,7 @@ import cities from "../helpers/uk_cities.json";
 import picture from "../img/Untitled-2.png";
 import background from "../img/Background.png";
 import whyAdopting from "../img/3813540.svg";
-import didYouKnow from "../img/3767179.svg";
+import didYouKnow from "../img/3767179.jpg";
 import homelessPets from "../img/3824645.svg";
 import adoptedPets from "../img/3780524.svg";
 import adoptDontBuy from "../img/4143369.svg";
@@ -100,7 +100,7 @@ const Home = (props) => {
             align="middle"
             style={styles.rowSecondSection}
           >
-            <Col xs={24} lg={12}>
+            <Col xs={20} lg={12}>
               <ResponsiveImageSize default minWidth={0} path={whyAdopting} />
               <Title level={4}>Why adopting?</Title>
               <Text style={styles.text}>
@@ -112,8 +112,12 @@ const Home = (props) => {
               </Text>
             </Col>
 
-            <Col xs={24} lg={8}>
-              <ResponsiveImageSize minWidth={100} path={didYouKnow} />
+            <Col xs={20} lg={8}>
+              <img
+                style={{ width: "100%", height: "100%" }}
+                alt="test"
+                src={didYouKnow}
+              />
               <Title level={4}>Did you know?</Title>
               <Text style={styles.text}>
                 Almost 6.5 million animals enter shelters worldwide and 1.5 of
@@ -125,21 +129,21 @@ const Home = (props) => {
 
           {/* STATS */}
           <Row justify="space-around" align="middle" style={styles.rowStats}>
-            <Col style={styles.rowStats} xs={24} lg={6}>
+            <Col style={{ textAlign: "center" }} xs={22} lg={6}>
               <ResponsiveImageSize default minWidth={0} path={adoptedPets} />
               <Title level={2}>
                 Since we launched, we have helped rehome over 13,531 pets into
                 happy homes.
               </Title>
             </Col>
-            <Col style={{ textAlign: "center" }} xs={24} lg={6}>
+            <Col style={{ textAlign: "center" }} xs={22} lg={6}>
               <ResponsiveImageSize default minWidth={0} path={homelessPets} />
               <Title level={2}>
                 Each day 312 pets remain homeless due to diverse reasons
               </Title>
             </Col>
 
-            <Col style={{ textAlign: "center" }} xs={24} lg={6}>
+            <Col style={{ textAlign: "center" }} xs={22} lg={6}>
               <ResponsiveImageSize default minWidth={0} path={adoptDontBuy} />
               <Title level={2}>
                 Why buying a new pet when there are so many homeless ones out
@@ -150,7 +154,7 @@ const Home = (props) => {
 
           {/* FUND US */}
           <Row justify="space-around" align="middle" style={styles.rowFundUs}>
-            <Col style={{ textAlign: "center" }} xs={24} lg={6}>
+            <Col style={{ textAlign: "center" }} xs={22} lg={6}>
               <Title>Support us</Title>
               <ResponsiveImageSize default minWidth={0} path={fundUs} />
               <Title level={4}>
@@ -195,7 +199,7 @@ const styles = {
     background: "white",
   },
   rowFundUs: { paddingTop: "50px", paddingBottom: "50px", background: "white" },
-  rowStats: { paddingTop: "50px" },
+  rowStats: { paddingTop: "50px", paddingBottom: "20px" },
   text: { fontSize: "16px" },
 };
 

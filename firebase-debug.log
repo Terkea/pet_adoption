@@ -1,0 +1,84 @@
+[debug] [2021-03-16T05:52:11.822Z] ----------------------------------------------------------------------
+[debug] [2021-03-16T05:52:11.823Z] Command:       /usr/bin/node /usr/bin/firebase init
+[debug] [2021-03-16T05:52:11.824Z] CLI Version:   9.6.1
+[debug] [2021-03-16T05:52:11.824Z] Platform:      linux
+[debug] [2021-03-16T05:52:11.824Z] Node Version:  v10.21.0
+[debug] [2021-03-16T05:52:11.824Z] Time:          Tue Mar 16 2021 05:52:11 GMT+0000 (Greenwich Mean Time)
+[debug] [2021-03-16T05:52:11.824Z] ----------------------------------------------------------------------
+[debug] [2021-03-16T05:52:11.824Z] 
+[debug] [2021-03-16T05:52:11.827Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-16T05:52:11.827Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/terkea/pet_adoption
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2021-03-16T05:52:29.552Z] > refreshing access token with scopes: []
+[debug] [2021-03-16T05:52:29.552Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-03-16T05:52:29.651Z] <<< HTTP RESPONSE 400 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","date":"Tue, 16 Mar 2021 05:52:19 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-03-16T05:52:29.652Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2021-03-16T05:52:29.696Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 401
+[debug] [2021-03-16T05:52:29.696Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2021-03-16T05:52:29.697Z] HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2021-03-16T05:52:29.703Z] FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+    at module.exports (/usr/lib/node_modules/firebase-tools/lib/responseToError.js:38:12)
+    at Client.doRequest (/usr/lib/node_modules/firebase-tools/lib/apiv2.js:238:23)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+[debug] [2021-03-16T05:54:14.092Z] ----------------------------------------------------------------------
+[debug] [2021-03-16T05:54:14.094Z] Command:       /usr/bin/node /usr/bin/firebase init
+[debug] [2021-03-16T05:54:14.094Z] CLI Version:   9.6.1
+[debug] [2021-03-16T05:54:14.094Z] Platform:      linux
+[debug] [2021-03-16T05:54:14.094Z] Node Version:  v10.21.0
+[debug] [2021-03-16T05:54:14.094Z] Time:          Tue Mar 16 2021 05:54:14 GMT+0000 (Greenwich Mean Time)
+[debug] [2021-03-16T05:54:14.094Z] ----------------------------------------------------------------------
+[debug] [2021-03-16T05:54:14.094Z] 
+[debug] [2021-03-16T05:54:14.097Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-16T05:54:14.098Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/terkea/pet_adoption
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2021-03-16T05:54:18.819Z] > refreshing access token with scopes: []
+[debug] [2021-03-16T05:54:18.820Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-03-16T05:54:18.905Z] <<< HTTP RESPONSE 400 {"date":"Tue, 16 Mar 2021 05:54:08 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-03-16T05:54:18.906Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2021-03-16T05:54:18.973Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 401
+[debug] [2021-03-16T05:54:18.973Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2021-03-16T05:54:18.973Z] HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2021-03-16T05:54:18.979Z] FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+    at module.exports (/usr/lib/node_modules/firebase-tools/lib/responseToError.js:38:12)
+    at Client.doRequest (/usr/lib/node_modules/firebase-tools/lib/apiv2.js:238:23)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
