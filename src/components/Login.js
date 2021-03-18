@@ -11,7 +11,7 @@ import {
   AutoComplete,
   Modal,
 } from "antd";
-import { LockOutlined, RocketOutlined, MailOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
 
 import SvgBackground from "../containers/SvgBackground";
 import { runNotifications } from "../helpers/Notification";
@@ -139,7 +139,7 @@ const Login = (props) => {
         style={styles.heightForTheRow}
       >
         <Col sm={14} md={14} lg={6}>
-          <RocketOutlined style={styles.logo} />
+          <UserOutlined style={styles.logo} />
           <Title align="middle">Login</Title>
           <Form
             name="basic"

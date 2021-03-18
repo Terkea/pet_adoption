@@ -4,9 +4,8 @@ import { useHistory } from "react-router-dom";
 import { Row, Col, Form, Input, Button, Typography, AutoComplete } from "antd";
 import {
   LockOutlined,
-  RocketOutlined,
-  MailOutlined,
   UserOutlined,
+  MailOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
 
@@ -88,7 +87,7 @@ const Register = (props) => {
         style={styles.heightForTheRow}
       >
         <Col sm={14} md={14} lg={6}>
-          <RocketOutlined style={styles.logo} />
+          <UserOutlined style={styles.logo} />
           <Title align="middle">Register</Title>
           <Form
             name="basic"

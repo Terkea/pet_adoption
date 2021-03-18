@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Row,
@@ -17,9 +17,9 @@ import {
 
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isEmpty, useFirestoreConnect } from "react-redux-firebase";
+import { isEmpty, isLoaded, useFirestoreConnect } from "react-redux-firebase";
 import { useFirestore } from "react-redux-firebase";
 import petTypes from "../helpers/types_breeds.json";
 import { runNotifications } from "../helpers/Notification";
