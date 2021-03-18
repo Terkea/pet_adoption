@@ -4,32 +4,66 @@
 
 DEMO: https://pet-adoption-54bb1.web.app/
 
-## Todos:
+# Installation
 
-add autofill for city in search and createpost -- DONE
-filter functionality -- DONE
-view post edit post - add post views -- DONE
-ADD PHONE NO IN REG FORM -- DONE
-BUG MOMENT IN SEARCH PAGE AND POST PAGE -- DONE
-navbar icon bug - create context for global state -- FIXED WITHOUT CONTEXT
-ONE SECTION IS NOT CENTERED IN HOME PAGE -- DONE
-ADD PADING TO HOMEPAGE MAIN SECTIONS -- DONE
-LOADING TIME FOR SVGS -- DONE
-DEPLOY -- DONE
-LOGIN REGISTER ICONS -- DONE
-FIREBASE ROUTER -- DONE
-FAVICON AND TITLE -- DONE
-SEARCH RANDOM INT MAINPAGE + ENABLE BUTTON -- DONE
-IF PET ANY DONT FILTER -- DONE
-SEARCH LOWERSTRING -- DONE
-BUG SELECT CITY IN MAINPAGE AND CREATE -- DONE
+## Option 1
 
-BUG DELETE POST ??? idk how to reproduce
-BUG TABLE
+### > **Docker**
 
-FIX THE IMAGES AND POSSIBLY COME UP WITH A BETTER VERSION FOR THE GALLERY
-CLEANUP CODE
-DOCS DEPLOY
+To install it with docker, you only need to run the following command:
+
+#### dev port 3000
+
+```
+docker-compose up -d --build
+```
+
+#### prod port 80
+
+```
+docker-compose -f docker-compose.prod.yaml up -d --build
+```
+
+## Option 2
+
+### > **React**
+
+```bash
+# Install the node packages
+npm install
+# Start the App in Development Mode
+npm start
+```
+
+# Configuration
+
+Replace the environment variables from `.env` and enable authentication with email and password.
+
+### bucket rules
+
+```
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
+database rules
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write;
+    }
+  }
+}
+```
 
 # Firebase router
 
