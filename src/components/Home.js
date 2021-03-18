@@ -20,6 +20,7 @@ const { Footer } = Layout;
 
 const Home = (props) => {
   const [options, setOptions] = useState([]);
+  const [search, setSearch] = useState("");
   let history = useHistory();
 
   const handleSearch = (value) => {
@@ -42,7 +43,7 @@ const Home = (props) => {
                   {city}, {cities[city]}
                 </span>
                 <span>
-                  <b>{Math.random(1)}</b> results
+                  <b>{Math.floor(Math.random() * (1 - 1000) + 1000)}</b> results
                 </span>
               </div>
             ),
@@ -82,10 +83,15 @@ const Home = (props) => {
                   onSearch={handleSearch}
                   onSelect={onSelect}
                   options={options}
+                  onChange={(val) => setSearch(val)}
+                  onClick={() =>
+                    search !== "" && history.push(`/search?city=${search}`)
+                  }
                   dropdownMatchSelectWidth={252}
                 >
                   <Input.Search
                     size="large"
+                    name="test"
                     placeholder="Search by city..."
                     enterButton
                   />

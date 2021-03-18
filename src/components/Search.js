@@ -53,21 +53,25 @@ const Search = (props) => {
   let queryPosts = [["status", "==", true]];
   if (city) {
     queryPosts = [
-      ["city", "==", city],
+      ["city", "==", city[0].toUpperCase() + city.substr(1, city.length)],
       ...queryPosts.filter((i) => i[0] !== "city"),
     ];
   }
   if (breed) {
-    queryPosts = [
-      ["breed", "==", breed],
-      ...queryPosts.filter((i) => i[0] !== "breed"),
-    ];
+    if (breed !== "Pet Breed (Any)") {
+      queryPosts = [
+        ["breed", "==", breed],
+        ...queryPosts.filter((i) => i[0] !== "breed"),
+      ];
+    }
   }
   if (petType) {
-    queryPosts = [
-      ["pet_type", "==", petType],
-      ...queryPosts.filter((i) => i[0] !== "pet_type"),
-    ];
+    if (petType !== "Pet Breed (Any)") {
+      queryPosts = [
+        ["pet_type", "==", petType],
+        ...queryPosts.filter((i) => i[0] !== "pet_type"),
+      ];
+    }
   }
   useFirestoreConnect([
     {

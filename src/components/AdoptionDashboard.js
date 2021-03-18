@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
-  Row,
-  Col,
   Typography,
   Button,
   Layout,
@@ -17,9 +15,9 @@ import {
 
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Navigation from "./Navigation";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isEmpty, isLoaded, useFirestoreConnect } from "react-redux-firebase";
+import { isEmpty, useFirestoreConnect } from "react-redux-firebase";
 import { useFirestore } from "react-redux-firebase";
 import petTypes from "../helpers/types_breeds.json";
 import { runNotifications } from "../helpers/Notification";
@@ -309,27 +307,23 @@ const AdoptionDashboard = () => {
           >
             Adoption Dashboard
           </Title>
-          <Row justify="center">
-            <Col span={20}>
-              <Button type="primary" style={{ marginTop: "20px" }}>
-                <Link to="/create_post">Create new post</Link>
-              </Button>
-              <Table
-                rowKey="key"
-                style={{
-                  marginTop: "10px",
-                  background: "white",
-                }}
-                columns={columns}
-                // posts returns an object of all docs in the query
-                // transform the object of objects into an array of objects
-                // and appending to that the docId as key
-                dataSource={Object.keys(posts).map((i) => {
-                  return { ...posts[i], key: i };
-                })}
-              />
-            </Col>
-          </Row>
+          {/* <Row justify="center"> */}
+          {/* <Col span={20}> */}
+          <Button type="primary" style={{ marginTop: "20px" }}>
+            <Link to="/create_post">Create new post</Link>
+          </Button>
+          <Table
+            rowKey="key"
+            columns={columns}
+            // posts returns an object of all docs in the query
+            // transform the object of objects into an array of objects
+            // and appending to that the docId as key
+            dataSource={Object.keys(posts).map((i) => {
+              return { ...posts[i], key: i };
+            })}
+          />
+          {/* </Col> */}
+          {/* </Row> */}
         </Content>
       </Layout>
     </Layout>

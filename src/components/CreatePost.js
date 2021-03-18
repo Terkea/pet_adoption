@@ -174,7 +174,11 @@ const CreatePost = () => {
           <Row justify="center">
             <Col md={8} xs={20} align="middle">
               <Card>
-                <Dragger customRequest={customUpload} {...uploadOptions}>
+                <Dragger
+                  customRequest={customUpload}
+                  {...uploadOptions}
+                  listType="picture"
+                >
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>
@@ -240,6 +244,9 @@ const CreatePost = () => {
                     options={options}
                     dropdownMatchSelectWidth={252}
                     label="city"
+                    onChange={(val) => {
+                      setCity(val);
+                    }}
                     style={{
                       width: "77%",
                       // marginTop: "8px",
