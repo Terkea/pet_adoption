@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 
 import {
   Typography,
@@ -34,16 +34,23 @@ const AdoptionDashboard = () => {
   const auth = useSelector((state) => state.firebase.auth);
   const [visible, setVisible] = useState(false);
   const [post, setPost] = useState({});
+  const [id, setId] = useState(null);
   const [selectedBreed, setSelectedBreed] = useState([
     {
       value: "Pet Type (Any)",
     },
   ]);
+
+  useEffect(() => {
+    setId(auth.uid)
+    console.log(auth.uid)
+  }, [auth])
+
   // query for all posts using the userId
   useFirestoreConnect([
     {
       collection: "posts",
-      userId: auth.uid,
+      where: [["userId", "==", id || null]]
     },
   ]);
 
@@ -319,7 +326,7 @@ const AdoptionDashboard = () => {
             // transform the object of objects into an array of objects
             // and appending to that the docId as key
             dataSource={Object.keys(posts).map((i) => {
-              return { ...posts[i], key: i };
+                return { ...posts[i], key: i };
             })}
           />
           {/* </Col> */}

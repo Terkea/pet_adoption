@@ -9,6 +9,7 @@ import Search from "./components/Search";
 import CreatePost from "./components/CreatePost";
 import Post from "./components/Post";
 import AdoptionDashboard from "./components/AdoptionDashboard";
+import CookieConsent from "react-cookie-consent";
 
 import "antd/dist/antd.less"; // or 'antd/dist/antd.less'
 import "./App.css";
@@ -22,6 +23,7 @@ const App = (props) => {
   return (
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
+        <CookieConsent>By continuing to browse or by clicking 'I understand', you agree to the storing of cookies on your device to enhance your site experience and for analytical purposes.</CookieConsent>
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />

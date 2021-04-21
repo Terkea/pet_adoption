@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Row, Col, Form, Input, Button, Typography, AutoComplete } from "antd";
+import {Row, Col, Form, Input, Button, Typography, AutoComplete, DatePicker} from "antd";
 import {
   LockOutlined,
   UserOutlined,
@@ -34,6 +34,8 @@ const styles = {
 const Register = (props) => {
   const history = useHistory();
   const firebase = useFirebase();
+  const [dob, setDob] = useState('')
+
   useEffect(() => {
     if (props.authError) {
       runNotifications(props.authError.message, "ERROR");
@@ -69,6 +71,7 @@ const Register = (props) => {
         {
           username: values.username,
           email: values.email,
+          dob: dob.toString(),
           phoneNo: values.telephone,
         }
       )
@@ -129,7 +132,10 @@ const Register = (props) => {
               />
             </Form.Item>
 
+            <DatePicker style={{width: '100%'}} onChange={setDob} placeholder="Date of birth" />
+
             <Form.Item
+                style={{marginTop: '20px'}}
               name="telephone"
               rules={[
                 {
