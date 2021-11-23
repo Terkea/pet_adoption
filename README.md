@@ -1,3 +1,8 @@
+Almost 6.5 million animals enter shelters worldwide and 1.5 of which are euthanized. Adopting allows these animals to experience life again.
+Pets for you is an online application meant to help find shelter to stray pets. The application was built using React.js and Firebase.
+
+![demo](./images/demo.gif)
+
 [![Deploy to Firebase Hosting on merge](https://github.com/Terkea/pet_adoption/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=master)](https://github.com/Terkea/pet_adoption/actions/workflows/firebase-hosting-merge.yml)
 
 [![Docker Image CI](https://github.com/Terkea/pet_adoption/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/Terkea/pet_adoption/actions/workflows/docker-image.yml)
